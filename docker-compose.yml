@@ -1,0 +1,67 @@
+version: '3.9'
+services: 
+    db: 
+        image: mysql:5.7
+        container_name: todolist_db
+        restart: always
+        ports: 
+            - 3306:3306
+        volumes: 
+            - db-data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: todolist
+            MYSQL_USER: todolist
+            MYSQL_PASSWORD: todolist
+        networks: 
+            - todolist
+
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: todolist_phpmyadmin
+        restart: always
+        depends_on:
+            - db
+        ports:
+            - 8090:80
+        environment:
+            PMA_HOST: db
+            PMA_USER: todolist
+            PMA_PASSWORD: todolist
+        networks: 
+            - todolist
+
+    maildev:
+        image: maildev/maildev
+        container_name: todolist_maildev
+        restart: always
+        command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+        ports:
+            - 8081:80
+        networks: 
+            - todolist
+    
+    web:
+        container_name: todolist_web
+        build: .
+        restart: always
+        depends_on:
+            - db
+        ports:
+            - 8000:80
+        environment: 
+            APP_ENV: dev
+            DATABASE_URL: mysql://todolist:todolist@db:3306/todolist?serverVersion=5.7
+            MAILER_DSN: smtp://maildev:25
+        volumes: 
+            - .:/var/www/html
+            - ./.docker/host:/etc/apache2/sites-enabled
+            - ./.docker/php.ini:/usr/local/etc/php/php.ini
+        networks: 
+            - todolist
+
+volumes: 
+    db-data:
+
+networks: 
+    todolist:
