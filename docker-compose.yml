@@ -1,8 +1,8 @@
 version: '3.9'
 services: 
     db: 
-        image: mysql:5.7
         container_name: todolist_db
+        image: mysql:5.7
         restart: always
         ports: 
             - 3306:3306
@@ -10,15 +10,15 @@ services:
             - db-data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: todolist
+            MYSQL_DATABASE: "todolist, todolist_test"
             MYSQL_USER: todolist
             MYSQL_PASSWORD: todolist
         networks: 
             - todolist
 
     phpmyadmin:
-        image: phpmyadmin
         container_name: todolist_phpmyadmin
+        image: phpmyadmin
         restart: always
         depends_on:
             - db
@@ -26,14 +26,14 @@ services:
             - 8090:80
         environment:
             PMA_HOST: db
-            PMA_USER: todolist
-            PMA_PASSWORD: todolist
+            PMA_USER: root
+            PMA_PASSWORD: root
         networks: 
             - todolist
-
+    
     maildev:
-        image: maildev/maildev
         container_name: todolist_maildev
+        image: maildev/maildev
         restart: always
         command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
         ports:
