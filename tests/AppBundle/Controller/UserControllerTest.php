@@ -42,8 +42,8 @@ class UserControllerTest extends WebTestCase
         $users = $this->userRepo->findBy(
             [
                 'username' => [
-                    'create', 
-                    'edit'
+                    'create',
+                    'edit_updated'
                 ]
             ]
         );
@@ -78,7 +78,7 @@ class UserControllerTest extends WebTestCase
             $user = new User();
             $user->setEmail("edit@test.com");
             $user->setUsername("edit");
-            $user->setPassword("edit");
+            $user->setPassword('$2y$13$mE8tNa5eKMbf7sWVFKTwbONcV29ZjU.siPJmd9reab4185AIQGwle');//edit
             $this->em->persist($user);
             $this->em->flush();
         }
@@ -99,20 +99,16 @@ class UserControllerTest extends WebTestCase
             $this->assertCount(1, $crawler->filter('div.alert:contains("Il n\'y a pas encore d\'utilisateur enregistré.")'));
         }
     }
-
-    public function testGetCreateForm():void
-    {
-        $crawler = $this->guestClient->request('GET', '/users/create');
-        $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('h1:contains("Créer un utilisateur")'));
-    }
-
-    public function testSubmitEmptyCreateFrom():void
+    
+    public function testWrongSubmitCreateFrom():void
     {
         /** As guest */
         $client = $this->guestClient;
         /** Get create form */
         $crawler = $client->request('GET', '/users/create');
+        $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('h1:contains("Créer un utilisateur")'));
+
         /** Select form */
         $buttonCrawlerNode = $crawler->selectButton('Ajouter');
         /** Fill fields */
@@ -124,6 +120,7 @@ class UserControllerTest extends WebTestCase
         ]);
         /** Submit form */
         $crawler = $client->submit($form);
+
         /** Check for error messages */
         $client->followRedirects();
         $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
@@ -157,7 +154,7 @@ class UserControllerTest extends WebTestCase
 
     }
 
-    public function testGetEditForm():void
+    public function testEditFormIsCorrectlyFilled():void
     {
         $user = $this->getUserToEdit();
         /** As guest */
@@ -165,7 +162,65 @@ class UserControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
         $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Modifier")'));
+
+        /** Check user infos */
+        $this->assertContains(
+            $user->getUsername(), 
+            $crawler->filter("#user_username")->first()->extract('value'));
+        $this->assertContains(
+            $user->getEmail(), 
+            $crawler->filter("#user_email")->first()->extract('value'));
     }
 
+    public function testWrongSubmitEditFrom():void
+    {
+        $user = $this->getUserToEdit();
+        /** As guest */
+        $client = $this->guestClient;
+        $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
+
+        /** Select form */
+        $buttonCrawlerNode = $crawler->selectButton('Modifier');
+        /** Fill fields */
+        $form = $buttonCrawlerNode->form([
+            'user[username]' => '',
+            'user[email]' => '',
+            'user[password][first]'  => '',
+            'user[password][second]'  => '',
+        ]);
+        /** Submit form */
+        $crawler = $client->submit($form);
+
+        /** Check for error messages */
+        $client->followRedirects();
+        $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
+    }
     
+    public function testEdit():void
+    {
+        $user = $this->getUserToEdit();
+        /** As guest */
+        $client = $this->guestClient;
+        $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
+
+        /** Select form */
+        $buttonCrawlerNode = $crawler->selectButton('Modifier');
+        /** Fill fields */
+        $form = $buttonCrawlerNode->form([
+            'user[username]' => $user->getUsername().'_updated',
+            'user[password][first]'  => $user->getPassword(),
+            'user[password][second]'  => $user->getPassword(),
+        ]);
+        /** Submit form */
+        $crawler = $client->submit($form);
+        $client->followRedirects();
+        /** Check for error messages */
+        $this->assertEquals(0, $crawler->filter('div.has-error')->count());
+        /** Check if user is created in db */
+        $this->assertTrue(
+            !!$this->userRepo->findOneBy(
+                ['username'=> $user->getUsername().'_updated']
+            )
+        );
+    }
 }
