@@ -15,7 +15,6 @@ class DefaultControllerTest extends WebTestCase
      */
     protected $guestClient;
     
-    
     /**
      * @var EntityManager
      */
@@ -78,35 +77,9 @@ class DefaultControllerTest extends WebTestCase
         return $user;
     }
 
-    // public function getUserToCreate(): User
-    // {
-    //     $user = new User();
-    //     $user->setEmail("create@test.com");
-    //     $user->setUsername("create");
-    //     return $user;
-    // }
-
-    // public function getUserToEdit(): User
-    // {
-    //     $user = $this->userRepo
-    //         ->findOneBy(
-    //             ['username' => 'edit']
-    //         );
-    //     if(!$user){
-    //         $user = new User();
-    //         $user->setEmail("edit@test.com");
-    //         $user->setUsername("edit");
-    //         $user->setPassword('$2y$13$mE8tNa5eKMbf7sWVFKTwbONcV29ZjU.siPJmd9reab4185AIQGwle');//edit
-    //         $this->em->persist($user);
-    //         $this->em->flush();
-    //     }
-
-    //     return $user;
-    // }
-
     /************** Tests *******************/
 
-    public function testIndexGuestRedirectToLogin()
+    public final function testIndexGuestRedirectToLogin():void
     {
         $client = static::createClient();
 

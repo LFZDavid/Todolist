@@ -7,12 +7,6 @@ use Tests\AppBundle\Controller\DefaultControllerTest;
 
 class UserControllerTest extends DefaultControllerTest
 {
-
-    public function testIndexGuestRedirectToLogin():void
-    {
-        return;
-    }
-
     public function testList()
     {
         $crawler = $this->guestClient->request('GET', '/users');
