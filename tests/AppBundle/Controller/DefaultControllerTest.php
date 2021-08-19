@@ -16,6 +16,11 @@ class DefaultControllerTest extends WebTestCase
     protected $guestClient;
     
     /**
+     * @var Client $authClient
+     */
+    protected $authClient;
+
+    /**
      * @var EntityManager
      */
     protected $em;
@@ -28,10 +33,9 @@ class DefaultControllerTest extends WebTestCase
     public function setUp():void
     {
         $this->guestClient = static::createClient();
-        $this->em = static::$kernel->getContainer()
-        ->get('doctrine')
-        ->getManager();
+        $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userRepo = $this->em->getRepository(User::class);
+        $this->authClient = $this->getAuthenticateClient();
     }
 
     public function tearDown(): void
@@ -77,15 +81,37 @@ class DefaultControllerTest extends WebTestCase
         return $user;
     }
 
+    public function getAuthenticateClient(): Client
+    {
+        $user = $this->getUser('logged');
+        return static::createClient([], [
+            'PHP_AUTH_USER' => $user->getUsername(),
+            'PHP_AUTH_PW'   => 'test',
+        ]);
+    }
+
     /************** Tests *******************/
 
     public final function testIndexGuestRedirectToLogin():void
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $client->followRedirects();
-        $this->assertContains('Redirecting to http://localhost/login',$client->getResponse()->getContent());
+        $crawler = $this->guestClient->request('GET', '/');
+        /** Guest is redirected to login page */
+        $this->assertEquals(302, $this->guestClient->getResponse()->getStatusCode());
+        $this->guestClient->followRedirects();
+        $this->assertContains('Redirecting to http://localhost/login',$this->guestClient->getResponse()->getContent());
+    }
+    
+    public final function testGetHomepageWhileLoggedIn():void
+    {
+        $this->authClient->request('GET', '/');
+        $response = $this->authClient->getResponse();
+        /** Authenticate user is not redirected to login page */
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertNotEquals(302, $response->getStatusCode());
+        /** Looking for unique message from homepage */
+        $this->assertContains(
+            "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", 
+            $response->getContent()
+        );
     }
 }

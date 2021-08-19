@@ -21,3 +21,8 @@ doctrine:
         host: db
         user: root
         password: root
+
+security:
+    firewalls:
+        main:
+            http_basic: ~
