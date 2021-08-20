@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Controller;
 
+use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -29,30 +30,45 @@ class DefaultControllerTest extends WebTestCase
      * @var EntityRepository
      */
     protected $userRepo;
+    
+    /**
+     * @var EntityRepository
+     */
+    protected $taskRepo;
 
     public function setUp():void
     {
         $this->guestClient = static::createClient();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userRepo = $this->em->getRepository(User::class);
+        $this->taskRepo = $this->em->getRepository(Task::class);
         $this->authClient = $this->getAuthenticateClient();
     }
 
     public function tearDown(): void
     {
-        /** Delete userTest from db */
-        $users = $this->userRepo->findBy(
-            [
+        /** Delete user and task from db */
+        $entities = [
+            $this->userRepo->findBy([
                 'username' => [
                     'create',
                     'edit_updated'
                 ]
-            ]
-        );
-        
-        foreach ($users as $user) {
-            $this->em->remove($user);
-        }
+            ]), 
+            $this->taskRepo->findBy([
+                'title' => [
+                    'create',
+                    'edit_updated'
+                ]
+            ]),
+        ];
+
+        array_map(function($embedTypes){
+            foreach ($embedTypes as $entity) {
+                $this->em->remove($entity);
+            }
+        },$entities);
+
         $this->em->flush();
 
         parent::tearDown();
@@ -88,6 +104,23 @@ class DefaultControllerTest extends WebTestCase
             'PHP_AUTH_USER' => $user->getUsername(),
             'PHP_AUTH_PW'   => 'test',
         ]);
+    }
+
+    public function getTask(string $type): Task
+    {
+        $task = $this->taskRepo->findOneBy(['title' => $type]);
+
+        if(!$task){
+            $task = new Task();
+            $task->setTitle($type);
+            $task->setContent("Content of $type task");
+            if($type != 'create') {
+                $this->em->persist($task);
+                $this->em->flush();
+            }
+        }
+
+        return $task;
     }
 
     /************** Tests *******************/
