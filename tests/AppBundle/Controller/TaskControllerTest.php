@@ -257,9 +257,9 @@ class TaskControllerTest extends DefaultControllerTest
             $crawler->filter("#task_content")->text());
     }
 
-    public function testToggleTaskDone():void
+    public function testToggleTask():void
     {
-        $task = $this->getTask('toToggleOn');
+        $task = $this->getTask('toToggle');
         $client = $this->authClient;
         /** Go to task list */
         $crawler = $client->request('GET','/tasks');
@@ -275,10 +275,9 @@ class TaskControllerTest extends DefaultControllerTest
         $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertContains(
-            '<strong>Superbe !</strong> La tâche toToggleOn a bien été marquée comme faite.',
+            'La tâche toToggle a bien été marquée comme faite.',
             $client->getResponse()->getContent()
         );
     }
-    // todo : test toggleTask
     // todo : test delete
 }

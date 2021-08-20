@@ -59,7 +59,7 @@ class DefaultControllerTest extends WebTestCase
                 'title' => [
                     'create',
                     'edit_updated',
-                    'toToggleOn'
+                    'toToggle'
                 ]
             ]),
         ];
@@ -118,7 +118,7 @@ class DefaultControllerTest extends WebTestCase
             $task = new Task();
             $task->setTitle($type);
             $task->setContent("Content of $type task");
-            if($type == 'toToggleOn'){
+            if($type == 'toToggle'){
                 $task->toggle(false);
             }
             if($type != 'create') {
