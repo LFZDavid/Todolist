@@ -58,7 +58,8 @@ class DefaultControllerTest extends WebTestCase
             $this->taskRepo->findBy([
                 'title' => [
                     'create',
-                    'edit_updated'
+                    'edit_updated',
+                    'toToggleOn'
                 ]
             ]),
         ];
@@ -68,6 +69,9 @@ class DefaultControllerTest extends WebTestCase
                 $this->em->remove($entity);
             }
         },$entities);
+
+
+
 
         $this->em->flush();
 
@@ -114,6 +118,9 @@ class DefaultControllerTest extends WebTestCase
             $task = new Task();
             $task->setTitle($type);
             $task->setContent("Content of $type task");
+            if($type == 'toToggleOn'){
+                $task->toggle(false);
+            }
             if($type != 'create') {
                 $this->em->persist($task);
                 $this->em->flush();
@@ -147,4 +154,6 @@ class DefaultControllerTest extends WebTestCase
             $response->getContent()
         );
     }
+
+    // todo:  test erros pages
 }

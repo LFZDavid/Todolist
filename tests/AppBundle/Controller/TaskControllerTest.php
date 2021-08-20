@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Controller;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\AppBundle\Controller\DefaultControllerTest;
 
@@ -156,7 +157,6 @@ class TaskControllerTest extends DefaultControllerTest
         /** Form is correctly filled */
         $this->assertCount(1, $crawler->filter('button:contains("Modifier")'));
         /** Check task infos */
-        
         $this->assertContains(
             $task->getTitle(), 
             $crawler->filter("#task_title")->first()->extract('value'));
@@ -237,8 +237,48 @@ class TaskControllerTest extends DefaultControllerTest
         $this->assertTrue(!!$task);
         
     }
-        
-    // todo : test click on Task::title redirect to editForm
+    
+    public function testGetEditFromOnTitleClidk()
+    {
+        $task = $this->getTask('find');
+        /** @var Crawler $crawler */
+        $client = $this->authClient;
+        $crawler = $client->request('GET','/tasks');
+        $link = $crawler->selectLink($task->getTitle())->link();
+        $crawler = $client->click($link);
+        /** Form is correctly filled */
+        $this->assertCount(1, $crawler->filter('button:contains("Modifier")'));
+        /** Check task infos */
+        $this->assertContains(
+            $task->getTitle(), 
+            $crawler->filter("#task_title")->first()->extract('value'));
+        $this->assertContains(
+            $task->getContent(), 
+            $crawler->filter("#task_content")->text());
+    }
+
+    public function testToggleTaskDone():void
+    {
+        $task = $this->getTask('toToggleOn');
+        $client = $this->authClient;
+        /** Go to task list */
+        $crawler = $client->request('GET','/tasks');
+
+        $baseUri = $client->getRequest()->getUri().'/';
+        /** Get task toggle form */
+        $form = $crawler->selectButton("Marquer comme faite")->reduce(function ($node, $i) use($task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$task->getId().'/toggle'){
+                return false;
+            }
+        })->form();
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertContains(
+            '<strong>Superbe !</strong> La tâche toToggleOn a bien été marquée comme faite.',
+            $client->getResponse()->getContent()
+        );
+    }
     // todo : test toggleTask
     // todo : test delete
 }
