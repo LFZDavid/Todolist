@@ -280,4 +280,39 @@ class TaskControllerTest extends DefaultControllerTest
         );
     }
     // todo : test delete
+    public function testDelete():void
+    {
+        $task = $this->getTask('toDelete');
+        $client = $this->authClient;
+        /** Go to task list */
+        $crawler = $client->request('GET','/tasks');
+
+        /** Check if task is present in tasklist*/
+        $this->assertEquals(
+            1,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+        
+        $baseUri = $client->getRequest()->getUri().'/';
+        /** Get task toggle form */
+        $form = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$task->getId().'/delete'){
+                return false;
+            }
+        })->form();
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertContains(
+            'La tâche a bien été supprimée.',
+            $client->getResponse()->getContent()
+        );
+
+        /** Check if task isn't in tasklist anymore */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertEquals(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+    }
 }
