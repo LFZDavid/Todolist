@@ -156,6 +156,4 @@ class DefaultControllerTest extends WebTestCase
             $response->getContent()
         );
     }
-
-    // todo:  test erros pages
 }

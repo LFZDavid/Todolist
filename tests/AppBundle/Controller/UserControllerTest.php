@@ -7,7 +7,7 @@ use Tests\AppBundle\Controller\DefaultControllerTest;
 
 class UserControllerTest extends DefaultControllerTest
 {
-    public function testList()
+    public function testList():void
     {
         $crawler = $this->guestClient->request('GET', '/users');
         $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());

@@ -243,7 +243,7 @@ class TaskControllerTest extends DefaultControllerTest
         
     }
     
-    public function testGetEditFromOnTitleClidk()
+    public function testGetEditFromOnTitleClidk():void
     {
         $task = $this->getTask('find');
         /** @var Crawler $crawler */
