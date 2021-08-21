@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM phpstorm/php-71-apache-xdebug
 
 RUN apt-get update && apt-get install -y libzip-dev zip \
     && docker-php-ext-install zip pdo_mysql pdo exif
