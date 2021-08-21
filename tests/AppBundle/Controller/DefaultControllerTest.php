@@ -4,6 +4,7 @@ namespace Tests\AppBundle\Controller;
 
 use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -118,6 +119,7 @@ class DefaultControllerTest extends WebTestCase
             $task = new Task();
             $task->setTitle($type);
             $task->setContent("Content of $type task");
+            $task->setCreatedAt(new DateTime());
             if($type == 'toToggle'){
                 $task->toggle(false);
             }

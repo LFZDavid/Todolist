@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Controller;
 
+use DateTime;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\AppBundle\Controller\DefaultControllerTest;
@@ -96,8 +97,12 @@ class TaskControllerTest extends DefaultControllerTest
         );
 
         /** Check if task has been created in db */
-        $updatedTask = $this->taskRepo->findOneBy(['title' => 'create']);
-        $this->assertTrue(!!$updatedTask);
+        $persistedTask = $this->taskRepo->findOneBy(['title' => 'create']);
+        $this->assertTrue(!!$persistedTask);
+        $this->assertSame(
+            (new DateTime())->format('Y-m-d H:i'),
+            $persistedTask->getCreatedAt()->format('Y-m-d H:i')
+        );
 
     }
 
@@ -279,7 +284,7 @@ class TaskControllerTest extends DefaultControllerTest
             $client->getResponse()->getContent()
         );
     }
-    // todo : test delete
+    
     public function testDelete():void
     {
         $task = $this->getTask('toDelete');
