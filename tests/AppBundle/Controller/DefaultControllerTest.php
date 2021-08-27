@@ -44,6 +44,7 @@ class DefaultControllerTest extends WebTestCase
         $this->userRepo = $this->em->getRepository(User::class);
         $this->taskRepo = $this->em->getRepository(Task::class);
         $this->authClient = $this->getAuthenticateClient();
+        
     }
 
     public function tearDown(): void

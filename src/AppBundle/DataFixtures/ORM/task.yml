@@ -1,0 +1,5 @@
+AppBundle\Entity\Task:
+  task_{1..10}:
+    title: <nameForTests()>
+    content: <text(100)>
+    isDone: <boolean(50)>
