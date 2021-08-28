@@ -8,3 +8,8 @@ AppBundle\Entity\Task:
     title: edit
     content: <text(100)>
     isDone: false
+
+  to_toggle:
+    title: toToggle
+    content: <text(100)>
+    isDone: false

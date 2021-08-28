@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Controller;
 
+use AppBundle\DataFixtures\ORM\LoadTestFixtures;
 use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
 use DateTime;
@@ -37,33 +38,29 @@ class DefaultControllerTest extends WebTestCase
      */
     protected $taskRepo;
 
+    /**
+     * @var LoadTestFixtures
+     */
+    protected $fixturesLoader;
+
     public function setUp():void
     {
+        parent::setUp();
         $this->guestClient = static::createClient();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userRepo = $this->em->getRepository(User::class);
         $this->taskRepo = $this->em->getRepository(Task::class);
-        $this->authClient = $this->getAuthenticateClient();
+        (new LoadTestFixtures())->load($this->em); // Load Fixtures
         
+        $this->authClient = $this->getAuthenticateClient();
     }
 
     public function tearDown(): void
     {
         /** Delete user and task from db */
         $entities = [
-            $this->userRepo->findBy([
-                'username' => [
-                    'create',
-                    'edit_updated'
-                ]
-            ]), 
-            $this->taskRepo->findBy([
-                'title' => [
-                    'create',
-                    'edit_updated',
-                    'toToggle'
-                ]
-            ]),
+            $this->userRepo->findAll(),
+            $this->taskRepo->findAll(),
         ];
 
         array_map(function($embedTypes){
@@ -71,9 +68,6 @@ class DefaultControllerTest extends WebTestCase
                 $this->em->remove($entity);
             }
         },$entities);
-
-
-
 
         $this->em->flush();
 
@@ -84,25 +78,32 @@ class DefaultControllerTest extends WebTestCase
 
     /************** tools *******************/
 
+    /**
+     * Provide user for tests
+     *
+     * @param string $type
+     * @return User
+     */
     public function getUser(string $type): User
     {
         $user = $this->userRepo->findOneBy(
                 ['username' => $type]
             );
-        if(!$user){
+        if($type == 'create'){
             $user = new User();
             $user->setEmail($type."@test.com");
             $user->setUsername($type);
             $user->setPassword('$2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO');//test
-            if($type != 'create') {
-                $this->em->persist($user);
-                $this->em->flush();
-            }
         }
 
         return $user;
     }
 
+    /**
+     * Provide authenticate user for tests
+     *
+     * @return Client
+     */
     public function getAuthenticateClient(): Client
     {
         $user = $this->getUser('logged');
@@ -112,6 +113,12 @@ class DefaultControllerTest extends WebTestCase
         ]);
     }
 
+    /**
+     * Provide task for tests
+     *
+     * @param string $type
+     * @return Task
+     */
     public function getTask(string $type): Task
     {
         $task = $this->taskRepo->findOneBy(['title' => $type]);
@@ -137,7 +144,7 @@ class DefaultControllerTest extends WebTestCase
 
     public final function testIndexGuestRedirectToLogin():void
     {
-        $crawler = $this->guestClient->request('GET', '/');
+        $this->guestClient->request('GET', '/');
         /** Guest is redirected to login page */
         $this->assertEquals(302, $this->guestClient->getResponse()->getStatusCode());
         $this->guestClient->followRedirects();

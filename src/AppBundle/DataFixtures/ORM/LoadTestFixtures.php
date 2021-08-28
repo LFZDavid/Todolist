@@ -13,12 +13,17 @@ class LoadTestFixtures implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $tasks = Fixtures::load(
+        Fixtures::load(
             __DIR__.'/task_test.yml',
             $manager,
             [
                 'providers' => [$this]
             ]);
+        
+        Fixtures::load(
+            __DIR__.'/user_test.yml',
+            $manager
+        );
     }
 
 }
