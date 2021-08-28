@@ -1,0 +1,12 @@
+AppBundle\Entity\User:
+  
+  user_dev:
+    username: dev
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO
+    email: dev@dev.com
+
+  user_{1..20}:
+    username: <name()>
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO
+    email: <email()>
+  

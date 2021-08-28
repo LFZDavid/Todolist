@@ -13,6 +13,9 @@ class LoadTestFixtures implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        if ($_ENV !== 'test') {
+            return;
+        }
         Fixtures::load(
             __DIR__.'/task_test.yml',
             $manager,
