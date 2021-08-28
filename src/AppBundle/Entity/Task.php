@@ -40,6 +40,11 @@ class Task
      */
     private $isDone;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist"})
+     */
+    private $author;
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -89,5 +94,17 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
+    }
+
+    public function setAuthor(?User $author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
     }
 }

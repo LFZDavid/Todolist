@@ -50,7 +50,7 @@ class DefaultControllerTest extends WebTestCase
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userRepo = $this->em->getRepository(User::class);
         $this->taskRepo = $this->em->getRepository(Task::class);
-        (new LoadTestFixtures())->load($this->em); // Load Fixtures
+        (new LoadTestFixtures())->load($this->em, true); // Load Fixtures
         
         $this->authClient = $this->getAuthenticateClient();
     }
@@ -123,17 +123,13 @@ class DefaultControllerTest extends WebTestCase
     {
         $task = $this->taskRepo->findOneBy(['title' => $type]);
 
-        if(!$task){
+        if($type == 'create'){
             $task = new Task();
             $task->setTitle($type);
             $task->setContent("Content of $type task");
             $task->setCreatedAt(new DateTime());
             if($type == 'toToggle'){
                 $task->toggle(false);
-            }
-            if($type != 'create') {
-                $this->em->persist($task);
-                $this->em->flush();
             }
         }
 

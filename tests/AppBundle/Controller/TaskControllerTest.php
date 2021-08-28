@@ -104,6 +104,12 @@ class TaskControllerTest extends DefaultControllerTest
             $persistedTask->getCreatedAt()->format('Y-m-d H:i')
         );
 
+        // var_dump($this->authClient);
+        /** Check if author is associate to current user*/
+        // $this->assertSame(
+        //     $this->getUser('logged')->getId(),
+        //     $persistedTask->getauthor()->getId()
+        // );
     }
 
     public function testCreateErrorEmpty():void

@@ -11,9 +11,9 @@ use Nelmio\Alice\Fixtures;
  */
 class LoadTestFixtures implements FixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager, $test = false)
     {
-        if ($_ENV !== 'test') {
+        if (!$test) {
             return;
         }
         Fixtures::load(
