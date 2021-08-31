@@ -15,3 +15,9 @@ AppBundle\Entity\User:
     password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
     email: <email()>
   
+  user_admin:
+    username: admin
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+    email: <email()>
+    roles: ["ROLE_ADMIN"]
+  

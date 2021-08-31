@@ -4,6 +4,7 @@ AppBundle\Entity\User:
     username: dev
     password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO
     email: dev@dev.com
+    roles: ["ROLE_ADMIN"]
 
   user_{1..20}:
     username: <name()>
