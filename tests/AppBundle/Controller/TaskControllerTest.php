@@ -112,7 +112,7 @@ class TaskControllerTest extends DefaultControllerTest
 
         /** Check if author is associate to current user*/
         $this->assertSame(
-            $this->getUser('logged')->getId(),
+            $this->getUser('admin')->getId(),
             $persistedTask->getAuthor()->getId()
         );
     }
