@@ -3,22 +3,32 @@
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\AppBundle\Controller\DefaultControllerTest;
 
 class UserControllerTest extends DefaultControllerTest
 {
     public function testList():void
     {
-        $crawler = $this->guestClient->request('GET', '/users');
-        $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
+        $client = $this->getAuthenticateClient();
+        $crawler = $client->request('GET', '/users');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Liste des utilisateurs")'));
         
         /** Message if user table is empty */
         if(empty($this->userRepo->findAll())){
             $this->assertCount(1, $crawler->filter('div.alert:contains("Il n\'y a pas encore d\'utilisateur enregistré.")'));
         }
+        
     }
     
+    public function testUserCantAccesList():void
+    {
+        $client = $this->guestClient;
+        $client->request('GET', '/users');
+        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
+    }
+
     public function testWrongSubmitCreateFrom():void
     {
         /** As guest */

@@ -4,13 +4,18 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 class UserController extends Controller
 {
     /**
+     *
+     * Require ROLE_ADMIN for *every* controller method in this class.
+     * @Security("has_role('ROLE_ADMIN')")
      * @Route("/users", name="user_list")
      */
     public function listAction()
