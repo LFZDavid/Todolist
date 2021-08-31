@@ -14,9 +14,8 @@ class UserController extends Controller
 {
     /**
      *
-     * Require ROLE_ADMIN for *every* controller method in this class.
-     * @Security("has_role('ROLE_ADMIN')")
      * @Route("/users", name="user_list")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function listAction()
     {
@@ -51,6 +50,7 @@ class UserController extends Controller
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(User $user, Request $request)
     {

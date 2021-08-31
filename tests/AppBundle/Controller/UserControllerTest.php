@@ -86,9 +86,9 @@ class UserControllerTest extends DefaultControllerTest
     {
         $user = $this->getUser('edit');
         /** As guest */
-        $client = $this->guestClient;
+        $client = $this->getAuthenticateClient();
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
-        $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Modifier")'));
 
         /** Check user infos */
@@ -111,7 +111,7 @@ class UserControllerTest extends DefaultControllerTest
     {
         $user = $this->getUser('edit');
         /** As guest */
-        $client = $this->guestClient;
+        $client = $this->getAuthenticateClient();
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
 
         /** Select form */
@@ -131,11 +131,19 @@ class UserControllerTest extends DefaultControllerTest
         $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
     }
     
+    public function testUserCantAccesEdit():void
+    {
+        $user = $this->getUser('edit');
+        $client = $this->guestClient;
+        $client->request('GET', '/users/'.$user->getId().'/edit');
+        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
+    }
+
     public function testEdit():void
     {
         $user = $this->getUser('edit');
         /** As guest */
-        $client = $this->guestClient;
+        $client = $this->getAuthenticateClient();
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
 
         /** Select form */
