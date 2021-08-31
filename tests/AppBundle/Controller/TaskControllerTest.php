@@ -37,6 +37,12 @@ class TaskControllerTest extends DefaultControllerTest
         
     }
 
+    public function testAuthorIsDisplay():void
+    {
+        $crawler = $this->authClient->request('GET','/tasks');
+        $this->assertGreaterThan(0, $crawler->filter('p.author')->count());
+    }
+
     public function testGuestCantAccessListOrCreate():void
     {
         $routes = ['/tasks', '/tasks/create'];

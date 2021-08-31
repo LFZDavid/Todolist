@@ -18,3 +18,8 @@ AppBundle\Entity\Task:
     title: toDelete
     content: <text(100)>
     isDone: false
+  
+  without_author:
+    title: withoutAuthor
+    content: <text(100)>
+    isDone: false
