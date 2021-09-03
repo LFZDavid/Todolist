@@ -296,53 +296,51 @@ class TaskControllerTest extends DefaultControllerTest
         );
     }
     
-    // public function testDelete():void
-    // {
-    //     $task = $this->getTask('toDelete');
-    //     $client = $this->authClient;
-    //     /** Go to task list */
-    //     $crawler = $client->request('GET','/tasks');
+    public function testDelete():void
+    {
+        $user = $this->getUser('author');
+        $task = $this->taskRepo->findOneBy(['author' => $user->getId()]);
+        $client = $this->getAuthenticateClient($user->getUsername());
+        /** Go to task list */
+        $crawler = $client->request('GET','/tasks');
 
-    //     /** Check if task is present in tasklist*/
-    //     $this->assertEquals(
-    //         1,
-    //         $crawler->filter('a:contains('.$task->getTitle().')')->count()
-    //     );
+        /** Check if task is present in tasklist*/
+        $this->assertEquals(
+            1,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
         
-    //     $baseUri = $client->getRequest()->getUri().'/';
-    //     /** Get task toggle form */
-    //     $form = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($task, $baseUri){
-    //         if($node->form()->getUri() != $baseUri.$task->getId().'/delete'){
-    //             return false;
-    //         }
-    //     })->form();
+        $baseUri = $client->getRequest()->getUri().'/';
+        /** Get task toggle form */
+        $form = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$task->getId().'/delete'){
+                return false;
+            }
+        })->form();
 
-    //     $client->submit($form);
-    //     $crawler = $client->followRedirect();
-    //     $this->assertContains(
-    //         'La tâche a bien été supprimée.',
-    //         $client->getResponse()->getContent()
-    //     );
+        $client->submit($form);
 
-    //     /** Check if task isn't in tasklist anymore */
-    //     $crawler = $client->request('GET','/tasks');
-    //     $this->assertEquals(
-    //         0,
-    //         $crawler->filter('a:contains('.$task->getTitle().')')->count()
-    //     );
-    // }
+        /** Check if task isn't in tasklist anymore */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertEquals(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+    }
 
     public function testAuthorCanDeleteOwnTask():void
     {
         $user = $this->getUser('author');
         $task = $this->taskRepo->findOneBy(['author' => $user->getId()]);
-        $id_task = $task->getId();
         $client = $this->getAuthenticateClient($user->getUsername());
         $client->request('POST','/tasks/'.$task->getId().'/delete');
-
-        /** Check if task still present in db */
-        $this->assertTrue(
-            !!$this->taskRepo->find($id_task)
+        
+        
+        /** Check if task is deleted from in db */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertEquals(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
         );
     }
 
@@ -353,8 +351,10 @@ class TaskControllerTest extends DefaultControllerTest
         $crawler = $client->request('POST','/tasks/'.$task->getId().'/delete');
         
         /** Check if task still present in db */
-        $this->assertTrue(
-            !!$this->taskRepo->findOneBy(['title' => 'toDelete'])
+        $crawler = $client->request('GET','/tasks');
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
         );
         
     }

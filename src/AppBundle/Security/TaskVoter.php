@@ -28,12 +28,12 @@ class TaskVoter extends Voter
 
     protected function voteOnAttribute($attribute, $task, TokenInterface $token): bool
     {
+        
         $user = $token->getUser();
 
-        if($user instanceof User){
+        if(!$user instanceof User){
             return false;
         }
-
         switch ($attribute) {
             case self::EDIT:
                 return $this->canEdit($task, $user);

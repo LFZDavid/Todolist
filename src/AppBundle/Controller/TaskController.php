@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
 use AppBundle\Form\TaskType;
+use AppBundle\Security\TaskVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,12 +85,11 @@ class TaskController extends Controller
      */
     public function deleteTaskAction(Task $task)
     {
-        $this->denyAccessUnlessGranted('delete', $task);
+        $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task, 'Vous ne pouvez pas supprimer cette tache!');
         
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
-
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
