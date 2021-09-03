@@ -6,7 +6,7 @@ use Tests\AppBundle\Controller\DefaultControllerTest;
 
 class SecurityControllerTest extends DefaultControllerTest
 {
-    public function getLoginFormTest():void
+    public function testGetLoginForm():void
     {
         $crawler = $this->guestClient->request('GET', '/login');
         $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
@@ -15,7 +15,7 @@ class SecurityControllerTest extends DefaultControllerTest
 
     }
 
-    public function loginTest():void
+    public function testLogin():void
     {
         $user = $this->getUser('login');
         $client = $this->guestClient;
@@ -25,22 +25,21 @@ class SecurityControllerTest extends DefaultControllerTest
         /** Fill fields */
         $form = $buttonCrawlerNode->form([
             '_username' => $user->getUsername(),
-            '_password'  => $user->getPassword(),
+            '_password'  => 'test',
         ]);
         $crawler = $client->submit($form);
-        /** Check for error messages */
-        $this->assertEquals(0, $crawler->filter('div.has-error')->count());
+        
         /** Check content of homepage */
-        $client->followRedirects();
+        $client->followRedirect();
         $this->assertContains('Bienvenue sur Todo List,', $client->getResponse()->getContent());
     }
 
-    public function wrongLoginTest():void
+    public function testWrongLogin():void
     {
         $client = $this->guestClient;
         $crawler = $client->request('GET', '/login');
         /** Select form */
-        $buttonCrawlerNode = $crawler->selectButton('Ajouter');
+        $buttonCrawlerNode = $crawler->selectButton('Se connecter');
         /** Fill fields */
         $form = $buttonCrawlerNode->form([
             '_username' => 'wrongUsername',
@@ -48,16 +47,17 @@ class SecurityControllerTest extends DefaultControllerTest
         ]);
         $crawler = $client->submit($form);
         /** Check for error messages */
-        $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
+        $crawler = $client->followRedirect();
+        $this->assertGreaterThan(0, $crawler->filter('div.alert-danger')->count());
     }
 
-    public function wrongLoginWithGoodUsernameTest():void
+    public function testWrongLoginWithGoodUsername():void
     {
         $user = $this->getUser('login');
         $client = $this->guestClient;
         $crawler = $client->request('GET', '/login');
         /** Select form */
-        $buttonCrawlerNode = $crawler->selectButton('Ajouter');
+        $buttonCrawlerNode = $crawler->selectButton('Se connecter');
         /** Fill fields */
         $form = $buttonCrawlerNode->form([
             '_username' => $user->getUsername(),
@@ -65,7 +65,8 @@ class SecurityControllerTest extends DefaultControllerTest
         ]);
         $crawler = $client->submit($form);
         /** Check for error messages */
-        $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
+        $crawler = $client->followRedirect();
+        $this->assertGreaterThan(0, $crawler->filter('div.alert-danger')->count());
     }
 
 }

@@ -1,0 +1,17 @@
+AppBundle\Entity\User:
+  
+  user_logged:
+    username: logged
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+    email: <email()>
+  
+  user_login:
+    username: login
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+    email: <email()>
+  
+  user_edit:
+    username: edit
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+    email: <email()>
+  

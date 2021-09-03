@@ -1,0 +1,15 @@
+AppBundle\Entity\Task:
+  task_find:
+    title: find
+    content: <text(100)>
+    isDone: false
+
+  task_find:
+    title: edit
+    content: <text(100)>
+    isDone: false
+
+  to_toggle:
+    title: toToggle
+    content: <text(100)>
+    isDone: false
