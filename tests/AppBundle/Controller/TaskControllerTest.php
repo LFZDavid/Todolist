@@ -328,6 +328,50 @@ class TaskControllerTest extends DefaultControllerTest
         );
     }
 
+    /**
+     * display delete btn only if current user can delete task
+     *
+     * @return void
+     */
+    public function testDeleteBtnDisplayForAuthor():void
+    {
+        $user = $this->getUser('author');
+        $author_task = $this->taskRepo->findOneBy(['author' => $user->getId()]);
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $crawler = $client->request('GET','/tasks');
+        $baseUri = $client->getRequest()->getUri().'/';
+        
+        /** check author's task */
+        $btns = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($author_task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$author_task->getId().'/delete'){
+                return false;
+            }
+        });
+        $this->assertGreaterThan(0,$btns->count());
+
+        $else_task = $this->getTask('withoutAuthor');
+        /** check else's task */
+        $btns = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($else_task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$else_task->getId().'/delete'){
+                return false;
+            }
+        });
+        $this->assertEquals(0,$btns->count());
+    }
+
+    public function testDeleteBtnDisplayForAdmin():void
+    {
+        $user = $this->getUser('admin');
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $crawler = $client->request('GET','/tasks');
+        $btns = $crawler->selectButton('Supprimer');
+        /** Check that every task has a btn */
+        $this->assertEquals(
+            $btns->count(),
+            $crawler->filter('div.thumbnail')->count()
+        );
+    }
+
     public function testAuthorCanDeleteOwnTask():void
     {
         $user = $this->getUser('author');
