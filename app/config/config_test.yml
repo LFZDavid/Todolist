@@ -14,3 +14,15 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine:
+    dbal:
+        dbname:   todolist_test
+        host: db
+        user: root
+        password: root
+
+security:
+    firewalls:
+        main:
+            http_basic: ~
