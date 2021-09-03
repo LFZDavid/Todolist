@@ -37,6 +37,12 @@ class TaskControllerTest extends DefaultControllerTest
         
     }
 
+    public function testAuthorIsDisplay():void
+    {
+        $crawler = $this->authClient->request('GET','/tasks');
+        $this->assertGreaterThan(0, $crawler->filter('p.author')->count());
+    }
+
     public function testGuestCantAccessListOrCreate():void
     {
         $routes = ['/tasks', '/tasks/create'];
@@ -104,6 +110,11 @@ class TaskControllerTest extends DefaultControllerTest
             $persistedTask->getCreatedAt()->format('Y-m-d H:i')
         );
 
+        /** Check if author is associate to current user*/
+        $this->assertSame(
+            $this->getUser('logged')->getId(),
+            $persistedTask->getAuthor()->getId()
+        );
     }
 
     public function testCreateErrorEmpty():void

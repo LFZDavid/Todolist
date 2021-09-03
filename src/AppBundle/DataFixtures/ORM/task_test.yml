@@ -4,12 +4,22 @@ AppBundle\Entity\Task:
     content: <text(100)>
     isDone: false
 
-  task_find:
+  task_edit:
     title: edit
     content: <text(100)>
     isDone: false
 
   to_toggle:
     title: toToggle
+    content: <text(100)>
+    isDone: false
+    
+  to_delete:
+    title: toDelete
+    content: <text(100)>
+    isDone: false
+  
+  without_author:
+    title: withoutAuthor
     content: <text(100)>
     isDone: false
