@@ -6,10 +6,13 @@ use AppBundle\DataFixtures\ORM\LoadTestFixtures;
 use AppBundle\Entity\Task;
 use AppBundle\Entity\User;
 use DateTime;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -142,7 +145,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $this->guestClient->request('GET', '/');
         /** Guest is redirected to login page */
-        $this->assertEquals(302, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
         $this->guestClient->followRedirects();
         $this->assertContains('Redirecting to http://localhost/login',$this->guestClient->getResponse()->getContent());
     }
@@ -152,8 +155,8 @@ class DefaultControllerTest extends WebTestCase
         $this->authClient->request('GET', '/');
         $response = $this->authClient->getResponse();
         /** Authenticate user is not redirected to login page */
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertNotEquals(302, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertNotEquals(Response::HTTP_FOUND, $response->getStatusCode());
         /** Looking for unique message from homepage */
         $this->assertContains(
             "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", 

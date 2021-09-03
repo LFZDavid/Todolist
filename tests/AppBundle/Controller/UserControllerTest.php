@@ -12,7 +12,7 @@ class UserControllerTest extends DefaultControllerTest
     {
         $client = $this->getAuthenticateClient();
         $crawler = $client->request('GET', '/users');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Liste des utilisateurs")'));
         
         /** Message if user table is empty */
@@ -35,7 +35,7 @@ class UserControllerTest extends DefaultControllerTest
         $client = $this->guestClient;
         /** Get create form */
         $crawler = $client->request('GET', '/users/create');
-        $this->assertEquals(200, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->guestClient->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Créer un utilisateur")'));
 
         /** Select form */
@@ -76,7 +76,7 @@ class UserControllerTest extends DefaultControllerTest
         $crawler = $client->submit($form);
         /** Check for error messages */
         $this->assertEquals(0, $crawler->filter('div.has-error')->count());
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
         /** Check if user is created in db */
         $this->assertTrue(!!$this->userRepo->findOneBy(['username'=>$user->getUsername()]));
 
@@ -88,7 +88,7 @@ class UserControllerTest extends DefaultControllerTest
         /** As guest */
         $client = $this->getAuthenticateClient();
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Modifier")'));
 
         /** Check user infos */
