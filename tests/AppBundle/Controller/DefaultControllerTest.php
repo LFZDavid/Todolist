@@ -104,9 +104,9 @@ class DefaultControllerTest extends WebTestCase
      *
      * @return Client
      */
-    public function getAuthenticateClient(): Client
+    public function getAuthenticateClient(string $type = 'admin'): Client
     {
-        $user = $this->getUser('admin');
+        $user = $this->getUser($type);
         return static::createClient([], [
             'PHP_AUTH_USER' => $user->getUsername(),
             'PHP_AUTH_PW'   => 'test',

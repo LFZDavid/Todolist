@@ -50,6 +50,15 @@
         ],
         "post-update-cmd": [
             "@symfony-scripts"
+        ],
+        "init-db": [
+            "bin/console d:d:d --if-exists --force --env=dev",
+            "bin/console d:d:c --env=dev",
+            "bin/console d:schema:update --force --env=dev ",
+            "bin/console d:f:l --env=dev",
+            "bin/console d:d:d --if-exists --force --env=test",
+            "bin/console d:d:c --env=test",
+            "bin/console d:schema:update --force --env=test"
         ]
     },
     "extra": {
