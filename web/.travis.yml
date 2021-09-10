@@ -5,4 +5,5 @@ php:
 
 script:
    - composer install
+   - composer init-db
    - vendor/bin/phpunit
