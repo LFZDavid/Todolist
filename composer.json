@@ -35,7 +35,8 @@
         "symfony/phpunit-bridge": "^3.0",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "nelmio/alice": "^2.1",
-        "symfony/profiler-pack": "^1.0"
+        "symfony/profiler-pack": "^1.0",
+        "php-coveralls/php-coveralls": "^2.4"
     },
     "scripts": {
         "symfony-scripts": [
