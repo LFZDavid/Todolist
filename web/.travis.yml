@@ -7,3 +7,13 @@ script:
    - composer install
    - composer init-db
    - vendor/bin/phpunit
+
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=3.9
+
+# safelist
+only:
+  - audit
