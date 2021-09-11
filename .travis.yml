@@ -11,9 +11,9 @@ php:
   - "7.1"
 script: 
   - "composer install"
-  - "bin/console d:d:d --if-exists --force --env=test"
-  - "bin/console d:d:c --env=test"
-  - "bin/console d:schema:update --force --env=test"
+  - "docker-compose exec web php bin/console d:d:d --if-exists --force --env=test"
+  - "docker-compose exec web php bin/console d:d:c --env=test"
+  - "docker-compose exec web php bin/console d:schema:update --force --env=test"
   - vendor/bin/phpunit
 services: 
   - docker
