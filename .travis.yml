@@ -1,0 +1,15 @@
+--- 
+env: 
+  - DOCKER_COMPOSE_VERSION=3
+language: php
+php: 
+  - "7.1"
+script: 
+  - "docker-compose up -d"
+  - "docker-compose exec web composer install -n"
+  - "docker-compose exec web bin/console d:d:d --if-exists --force --env=test"
+  - "docker-compose exec web bin/console d:d:c --env=test"
+  - "docker-compose exec web bin/console d:schema:update --force --env=test"
+  - "docker-compose exec web vendor/bin/phpunit"
+services: 
+  - docker
