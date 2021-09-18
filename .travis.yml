@@ -5,7 +5,7 @@ language: php
 php: 
   - "7.1"
 script: 
-  - "docker-compose up -d"
+  - "USER_ID=root docker-compose up -d"
   - "docker-compose exec web composer install -n"
   - "docker-compose exec web bin/console d:d:d --if-exists --force --env=test"
   - "docker-compose exec web bin/console d:d:c --env=test"
