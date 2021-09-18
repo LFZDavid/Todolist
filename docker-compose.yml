@@ -47,7 +47,7 @@ services:
         restart: always
         depends_on:
             - db
-        user: root
+        user: ${USER_ID}
         ports:
             - 8000:80
         environment: 
