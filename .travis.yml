@@ -10,6 +10,9 @@ script:
   - "docker-compose exec web bin/console d:d:d --if-exists --force --env=test"
   - "docker-compose exec web bin/console d:d:c --env=test"
   - "docker-compose exec web bin/console d:schema:update --force --env=test"
-  - "docker-compose exec web vendor/bin/phpunit"
+  - "docker-compose exec web mkdir -p build/logs"
+  - "docker-compose exec web vendor/bin/phpunit -c phpunit.xml.dist"
+after_success:
+  - "docker-compose exec web travis_retry php vendor/bin/php-coveralls"
 services: 
   - docker
