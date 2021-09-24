@@ -9,7 +9,7 @@ warnings_are_errors: false
 
 install: 
   - "composer install -n"
-  - "SYMFONY__DB_HOST=127.0.0.1 SYMFONY__DB_PWD=~ cp app/config/parameters.yml.travis app/config/parameters.yml "
+  - "db_host=127.0.0.1 db_pwd=~ cp app/config/parameters.yml.travis app/config/parameters.yml "
   - "bin/console d:d:d --if-exists --force --env=test"
   - "bin/console d:d:c --env=test"
   - "bin/console d:schema:update --force --env=test"
