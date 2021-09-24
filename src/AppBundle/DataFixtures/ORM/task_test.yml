@@ -23,3 +23,15 @@ AppBundle\Entity\Task:
     title: withoutAuthor
     content: <text(100)>
     isDone: false
+  
+  with_author:
+    title: with_author
+    content: <text(100)>
+    isDone: false
+    author: "@author"
+
+AppBundle\Entity\User:
+  author:
+    username: author
+    password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+    email: <email()>
