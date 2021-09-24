@@ -1,18 +1,22 @@
 --- 
-env: 
-  - DOCKER_COMPOSE_VERSION=3
 language: php
 php: 
   - "7.1"
-script: 
-  - "USER_ID=root docker-compose up -d"
-  - "docker-compose exec web composer install -n"
-  - "docker-compose exec web bin/console d:d:d --if-exists --force --env=test"
-  - "docker-compose exec web bin/console d:d:c --env=test"
-  - "docker-compose exec web bin/console d:schema:update --force --env=test"
-  - "docker-compose exec web mkdir -p build/logs"
-  - "docker-compose exec web vendor/bin/phpunit -c phpunit.xml.dist"
+cache:
+    directories:
+        - $HOME/.composer/cache
+warnings_are_errors: false
+
+install: 
+  - "composer install -n"
+  - "bin/console d:d:d --if-exists --force --env=test"
+  - "bin/console d:d:c --env=test"
+  - "bin/console d:schema:update --force --env=test"
+scritpt:
+  - "mkdir -p build/logs"
+  - "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml"
+
 after_success:
-  - "docker-compose exec web php php-coveralls.phar"
+  - "php php-coveralls.phar"
 services: 
-  - docker
+  - mysql
