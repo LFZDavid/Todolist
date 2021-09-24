@@ -9,9 +9,9 @@ warnings_are_errors: false
 
 install: 
   - "composer install -n"
-  - "bin/console d:d:d --if-exists --force --env=test"
-  - "bin/console d:d:c --env=test"
-  - "bin/console d:schema:update --force --env=test"
+  - "bin/console d:d:d --if-exists --force --env=travis"
+  - "bin/console d:d:c --env=travis"
+  - "bin/console d:schema:update --force --env=travis"
 scritpt:
   - "mkdir -p build/logs"
   - "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml"
