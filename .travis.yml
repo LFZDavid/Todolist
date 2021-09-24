@@ -7,9 +7,12 @@ cache:
         - $HOME/.composer/cache
 warnings_are_errors: false
 
+env:
+  - SYMFONY__DB_HOST=127.0.0.1
+  - SYMFONY__DB_PWD=~
 install: 
   - "composer install -n"
-  - "cp app/config/parameters.yml.travis app/config/parameters.yml"
+  - "cp app/config/parameters.yml.travis app/config/parameters.yml "
   - "bin/console d:d:d --if-exists --force --env=test"
   - "bin/console d:d:c --env=test"
   - "bin/console d:schema:update --force --env=test"

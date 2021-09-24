@@ -54,6 +54,9 @@ services:
             APP_ENV: dev
             DATABASE_URL: mysql://todolist:todolist@db:3306/todolist?serverVersion=5.7
             MAILER_DSN: smtp://maildev:25
+            SYMFONY__DB_HOST: db
+            SYMFONY__DB_PWD: root
+
         volumes: 
             - .:/var/www/html
             - ./.docker/host:/etc/apache2/sites-enabled
