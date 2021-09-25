@@ -43,10 +43,16 @@ class TaskControllerTest extends DefaultControllerTest
         $this->assertGreaterThan(0, $crawler->filter('p.author')->count());
     }
 
-    public function testDisplayOnlyToDoTask():void
+    public function testDisplayOnlyToDoTasks():void
     {
         $crawler = $this->authClient->request('GET', '/tasks_todo');
         $this->assertEquals(0, $crawler->filter('span.glyphicon-ok')->count());
+    }
+
+    public function testDisplayOnlyDoneTasks():void
+    {
+        $crawler = $this->authClient->request('GET', '/tasks_done');
+        $this->assertEquals(0, $crawler->filter('span.glyphicon-remove')->count());
     }
 
     public function testGuestCantAccessListOrCreate():void
