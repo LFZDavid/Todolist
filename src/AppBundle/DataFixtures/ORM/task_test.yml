@@ -35,3 +35,4 @@ AppBundle\Entity\User:
     username: author
     password: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
     email: <email()>
+
