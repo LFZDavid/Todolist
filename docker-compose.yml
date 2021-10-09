@@ -52,10 +52,12 @@ services:
             - 8000:80
         environment: 
             APP_ENV: dev
-            DATABASE_URL: mysql://todolist:todolist@db:3306/todolist?serverVersion=5.7
+            # DATABASE_URL: mysql://todolist:todolist@db:3306/todolist?serverVersion=5.7
             MAILER_DSN: smtp://maildev:25
             SYMFONY__DB_HOST: db
             SYMFONY__DB_PWD: root
+            MYSQL_USER: todolist
+            MYSQL_PASSWORD: todolist
 
         volumes: 
             - .:/var/www/html

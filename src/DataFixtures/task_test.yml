@@ -1,0 +1,41 @@
+App\Entity\Task:
+  task_find:
+    title: find
+    content: <text(100)>
+    isDone: false
+
+  task_edit:
+    title: edit
+    content: <text(100)>
+    isDone: false
+
+  to_toggle:
+    title: toToggle
+    content: <text(100)>
+    isDone: false
+    
+  to_delete:
+    title: toDelete
+    content: <text(100)>
+    isDone: false
+  
+  without_author:
+    title: withoutAuthor
+    content: <text(100)>
+    isDone: false
+  
+  with_author:
+    title: with_author
+    content: <text(100)>
+    isDone: false
+    author: "@author"
+
+parameters:
+    hash: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+
+App\Entity\User:
+  author:
+    username: author
+    password: <{hash}> 
+    email: <email()>
+

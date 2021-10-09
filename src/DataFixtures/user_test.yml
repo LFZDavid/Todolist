@@ -1,0 +1,26 @@
+parameters:
+    hash: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+
+App\Entity\User:
+  
+  user_logged:
+    username: logged
+    password: <{hash}> 
+    email: <email()>
+  
+  user_login:
+    username: login
+    password: <{hash}> 
+    email: <email()>
+  
+  user_edit:
+    username: edit
+    password: <{hash}> 
+    email: <email()>
+  
+  user_admin:
+    username: admin
+    password: <{hash}> 
+    email: <email()>
+    roles: ["ROLE_ADMIN"]
+  

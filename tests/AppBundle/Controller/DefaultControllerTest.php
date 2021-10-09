@@ -2,17 +2,16 @@
 
 namespace Tests\AppBundle\Controller;
 
-use AppBundle\DataFixtures\ORM\LoadTestFixtures;
-use AppBundle\Entity\Task;
-use AppBundle\Entity\User;
 use DateTime;
-use Doctrine\Common\Annotations\Reader;
+use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Nelmio\Alice\Loader\NativeLoader;
+use App\DataFixtures\LoadTestFixtures;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -48,32 +47,18 @@ class DefaultControllerTest extends WebTestCase
 
     public function setUp():void
     {
-        parent::setUp();
+        self::bootKernel();
         $this->guestClient = static::createClient();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userRepo = $this->em->getRepository(User::class);
         $this->taskRepo = $this->em->getRepository(Task::class);
-        (new LoadTestFixtures())->load($this->em, true); // Load Fixtures
-        
         $this->authClient = $this->getAuthenticateClient();
+        $this->fixturesLoader = new LoadTestFixtures();
+        $this->fixturesLoader->load($this->em);
     }
 
     public function tearDown(): void
     {
-        /** Delete user and task from db */
-        $entities = [
-            $this->userRepo->findAll(),
-            $this->taskRepo->findAll(),
-        ];
-
-        array_map(function($embedTypes){
-            foreach ($embedTypes as $entity) {
-                $this->em->remove($entity);
-            }
-        },$entities);
-
-        $this->em->flush();
-
         parent::tearDown();
         $this->em->close();
         $this->em = null; // avoid memory leaks
@@ -89,9 +74,10 @@ class DefaultControllerTest extends WebTestCase
      */
     public function getUser(string $type): User
     {
-        $user = $this->userRepo->findOneBy(
-                ['username' => $type]
-            );
+        $loader = new NativeLoader();
+        $objectSet = $loader->loadFile('src/DataFixtures/user_test.yml');
+        $user = $objectSet->getObjects()['user_'.$type];
+
         if($type == 'create'){
             $user = new User();
             $user->setEmail($type."@test.com");
@@ -112,7 +98,7 @@ class DefaultControllerTest extends WebTestCase
         $user = $this->getUser($type);
         return static::createClient([], [
             'PHP_AUTH_USER' => $user->getUsername(),
-            'PHP_AUTH_PW'   => 'test',
+            'PHP_AUTH_PW'   => '',
         ]);
     }
 
@@ -124,7 +110,9 @@ class DefaultControllerTest extends WebTestCase
      */
     public function getTask(string $type): Task
     {
-        $task = $this->taskRepo->findOneBy(['title' => $type]);
+        $loader = new NativeLoader();
+        $objectSet = $loader->loadFile('src/DataFixtures/task_test.yml');
+        $task = $objectSet->getObjects()['task_'.$type];
 
         if($type == 'create'){
             $task = new Task();

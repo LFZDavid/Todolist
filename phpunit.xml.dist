@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
-         bootstrap="app/autoload.php"
->
-    <php>
-        <ini name="error_reporting" value="-1" />
-        <server name="KERNEL_DIR" value="app/" />
-    </php>
-
-    <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>src</directory>
-            <exclude>
-                <directory>src/*Bundle/Resources</directory>
-                <directory>src/*/*Bundle/Resources</directory>
-                <directory>src/*/Bundle/*Bundle/Resources</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-    <logging>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="vendor/autoload.php">
+  <coverage>
+    <include>
+      <directory>src</directory>
+    </include>
+    <exclude>
+      <directory>src/*Bundle/Resources</directory>
+      <directory>src/*/*Bundle/Resources</directory>
+      <directory>src/*/Bundle/*Bundle/Resources</directory>
+    </exclude>
+    <report>
+      <clover outputFile="build/logs/clover.xml"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <env name="KERNEL_DIR" value="app/"/>
+    <env name="KERNEL_CLASS" value="App\Kernel" />
+    <ini name="xdebug.mode" value="coverage"/>
+    <env name="XDEBUG_MODE" value="coverage"/>
+    <!-- ###+ symfony/framework-bundle ### -->
+    <env name="APP_ENV" value="test" force="true"/>
+    <env name="APP_SECRET" value="436d77ebf53b485a4afe262a0bfbb033"/>
+    <!-- env name="TRUSTED_PROXIES" value="127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16" -->
+    <!-- env name="TRUSTED_HOSTS" value="'^(localhost|example\.com)$'" -->
+    <!-- ###- symfony/framework-bundle ### -->
+    <!-- ###+ doctrine/doctrine-bundle ### -->
+    <!-- Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
+    <!-- IMPORTANT: You MUST configure your server version, either here or in config/packages/doctrine.yaml -->
+    <!--  -->
+    <!-- DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db" -->
+    <!-- DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7" -->
+    <env name="DATABASE_URL" value="postgresql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=13&amp;charset=utf8"/>
+    <!-- ###- doctrine/doctrine-bundle ### -->
+  </php>
+  <testsuites>
+    <testsuite name="Project Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <logging>   
     <!-- coveralls -->
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
+  </logging>
 </phpunit>

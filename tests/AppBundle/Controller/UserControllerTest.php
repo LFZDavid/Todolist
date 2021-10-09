@@ -2,7 +2,7 @@
 
 namespace Tests\AppBundle\Controller;
 
-use AppBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\AppBundle\Controller\DefaultControllerTest;
 
