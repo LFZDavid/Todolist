@@ -8,15 +8,6 @@ Base du projet #8 : Améliorez un projet existant
 
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 
-## Environement variables
- /.env
- ```
- 
-
- CC_TEST_REPORTER_ID=
- ```
----
-
 ## Technical Requirements
 ---
 * PHP ( version >= 7.1.3 )
