@@ -24,18 +24,18 @@ class UserControllerTest extends DefaultControllerTest
     
     public function testUserCantAccesList():void
     {
-        $client = $this->guestClient;
+        $client = static::createClient();
         $client->request('GET', '/users');
-        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertResponseRedirects();
     }
 
     public function testWrongSubmitCreateFrom():void
     {
         /** As guest */
-        $client = $this->guestClient;
+        $client = static::createClient();
         /** Get create form */
         $crawler = $client->request('GET', '/users/create');
-        $this->assertEquals(Response::HTTP_OK, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('h1:contains("Créer un utilisateur")'));
 
         /** Select form */
@@ -52,7 +52,7 @@ class UserControllerTest extends DefaultControllerTest
 
         /** Check for error messages */
         $client->followRedirects();
-        $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
+        $this->assertSelectorExists('span.form-error-icon');
     }
 
     public function testCreate():void
@@ -61,7 +61,7 @@ class UserControllerTest extends DefaultControllerTest
         $user = $this->getUser('create');
 
         /** As guest */
-        $client = $this->guestClient;
+        $client = static::createClient();
         /** Get create form */
         $crawler = $client->request('GET', '/users/create');
         /** Select form */
@@ -109,10 +109,11 @@ class UserControllerTest extends DefaultControllerTest
 
     public function testWrongSubmitEditFrom():void
     {
-        $user = $this->getUser('edit');
-        /** As guest */
-        $client = $this->getAuthenticateClient();
+        $user = $this->getUser('admin');
+        $client = $this->getAuthenticateClient('admin');
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
+
+        $this->assertResponseIsSuccessful();
 
         /** Select form */
         $buttonCrawlerNode = $crawler->selectButton('Modifier');
@@ -128,15 +129,15 @@ class UserControllerTest extends DefaultControllerTest
 
         /** Check for error messages */
         $client->followRedirects();
-        $this->assertGreaterThan(0, $crawler->filter('div.has-error')->count());
+        $this->assertSelectorExists('span.form-error-icon');
     }
     
     public function testUserCantAccesEdit():void
     {
         $user = $this->getUser('edit');
-        $client = $this->guestClient;
+        $client = static::createClient();
         $client->request('GET', '/users/'.$user->getId().'/edit');
-        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
     }
 
     public function testEdit():void
@@ -144,6 +145,7 @@ class UserControllerTest extends DefaultControllerTest
         $user = $this->getUser('edit');
         /** As guest */
         $client = $this->getAuthenticateClient();
+        $client->followRedirects();
         $crawler = $client->request('GET', '/users/'.$user->getId().'/edit');
 
         /** Select form */
@@ -151,15 +153,17 @@ class UserControllerTest extends DefaultControllerTest
         /** Fill fields */
         $form = $buttonCrawlerNode->form([
             'user[username]' => $user->getUsername().'_updated',
-            'user[password][first]'  => $user->getPassword(),
-            'user[password][second]'  => $user->getPassword(),
+            'user[password][first]'  => 'test',
+            'user[password][second]'  => 'test',
         ]);
 
         /** Submit form */
         $crawler = $client->submit($form);
-        $client->followRedirects();
+        
         /** Check for error messages */
-        $this->assertEquals(0, $crawler->filter('div.has-error')->count());
+        $this->assertSelectorNotExists('span.form-error-icon');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('.alert-success');
         /** Check if user is created in db */
         $this->assertTrue(
             !!$this->userRepo->findOneBy(
@@ -193,9 +197,6 @@ class UserControllerTest extends DefaultControllerTest
         $user = $this->getUser('edit');
         $client = $this->getAuthenticateClient('admin');
         $crawler = $client->request('GET','/users/'.$user->getId().'/edit');
-        $this->assertEquals(
-            1,
-            $crawler->filter('#user_roles')->count()
-        );
+        $this->assertSelectorExists('#user_roles');
     }
 }
