@@ -1,0 +1,20 @@
+# parameters:
+#     password: test #test
+
+App\Entity\Task:
+  task_{1..10}:
+    title: <text(10)>
+    content: <text(100)>
+    isDone: <boolean(50)>
+  
+  author_task:
+    title: author_task
+    content: <text(100)>
+    isDone: false
+    author: '@author'
+
+App\Entity\User:
+  author:
+    username: author
+    password: test
+    email: <email()>

@@ -1,0 +1,26 @@
+# parameters:
+#     hash: test #test
+
+App\Entity\User:
+  
+  user_logged:
+    username: logged
+    password: test
+    email: <email()>
+  
+  user_login:
+    username: login
+    password: test
+    email: <email()>
+  
+  user_edit:
+    username: edit
+    password: test
+    email: <email()>
+  
+  user_admin:
+    username: admin
+    password: test
+    email: <email()>
+    roles: ["ROLE_ADMIN"]
+  

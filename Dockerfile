@@ -1,4 +1,4 @@
-FROM phpstorm/php-71-apache-xdebug
+FROM gbrayhan/php74-xdebug
 
 RUN apt-get update && apt-get install -y libzip-dev zip \
     && docker-php-ext-install zip pdo_mysql pdo exif
@@ -10,6 +10,12 @@ RUN apt-get -y update \
 
 RUN cd ~ && curl -sS https://getcomposer.org/installer -o composer-setup.php \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+# Xdebug
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN a2enmod rewrite
 RUN service apache2 restart

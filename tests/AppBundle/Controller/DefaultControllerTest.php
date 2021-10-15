@@ -2,17 +2,16 @@
 
 namespace Tests\AppBundle\Controller;
 
-use AppBundle\DataFixtures\ORM\LoadTestFixtures;
-use AppBundle\Entity\Task;
-use AppBundle\Entity\User;
 use DateTime;
-use Doctrine\Common\Annotations\Reader;
+use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Request;
+use App\DataFixtures\LoadTestFixtures;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -48,14 +47,14 @@ class DefaultControllerTest extends WebTestCase
 
     public function setUp():void
     {
-        parent::setUp();
-        $this->guestClient = static::createClient();
-        $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
-        $this->userRepo = $this->em->getRepository(User::class);
-        $this->taskRepo = $this->em->getRepository(Task::class);
-        (new LoadTestFixtures())->load($this->em, true); // Load Fixtures
-        
-        $this->authClient = $this->getAuthenticateClient();
+        self::bootKernel();
+        $container = self::$container;
+        $this->em = $container->get('doctrine')->getManager();
+        $this->userRepo = $container->get('doctrine')->getRepository(User::class);
+        $this->taskRepo = $container->get('doctrine')->getRepository(Task::class);
+        $this->fixturesLoader = new LoadTestFixtures($container->get(UserPasswordEncoderInterface::class));
+        $this->fixturesLoader->load($this->em, true);
+        self::ensureKernelShutdown();
     }
 
     public function tearDown(): void
@@ -73,7 +72,6 @@ class DefaultControllerTest extends WebTestCase
         },$entities);
 
         $this->em->flush();
-
         parent::tearDown();
         $this->em->close();
         $this->em = null; // avoid memory leaks
@@ -90,8 +88,9 @@ class DefaultControllerTest extends WebTestCase
     public function getUser(string $type): User
     {
         $user = $this->userRepo->findOneBy(
-                ['username' => $type]
-            );
+            ['username' => $type]
+        );
+
         if($type == 'create'){
             $user = new User();
             $user->setEmail($type."@test.com");
@@ -109,9 +108,8 @@ class DefaultControllerTest extends WebTestCase
      */
     public function getAuthenticateClient(string $type = 'admin'): Client
     {
-        $user = $this->getUser($type);
         return static::createClient([], [
-            'PHP_AUTH_USER' => $user->getUsername(),
+            'PHP_AUTH_USER' => $type,
             'PHP_AUTH_PW'   => 'test',
         ]);
     }
@@ -141,26 +139,16 @@ class DefaultControllerTest extends WebTestCase
 
     /************** Tests *******************/
 
-    public final function testIndexGuestRedirectToLogin():void
-    {
-        $this->guestClient->request('GET', '/');
-        /** Guest is redirected to login page */
-        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
-        $this->guestClient->followRedirects();
-        $this->assertContains('Redirecting to http://localhost/login',$this->guestClient->getResponse()->getContent());
-    }
-    
     public final function testGetHomepageWhileLoggedIn():void
     {
-        $this->authClient->request('GET', '/');
-        $response = $this->authClient->getResponse();
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => "logged",
+            'PHP_AUTH_PW'   => 'test',
+        ]);
+        $client->request('GET', '/');
         /** Authenticate user is not redirected to login page */
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertNotEquals(Response::HTTP_FOUND, $response->getStatusCode());
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         /** Looking for unique message from homepage */
-        $this->assertContains(
-            "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", 
-            $response->getContent()
-        );
+        $this->assertSelectorTextContains('h1', "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !");
     }
 }

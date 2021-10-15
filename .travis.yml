@@ -1,16 +1,19 @@
 --- 
 language: php
 php: 
-  - "7.1"
+  - "7.4"
+env:
+  global:
+      - XDEBUG_MODE=coverage
 cache:
     directories:
         - $HOME/.composer/cache
 warnings_are_errors: false
 
 install: 
+  - "cp travis.env .env"
+  - "cp phpunit.xml.dist.travis phpunit.xml.dist"
   - "composer install -n"
-  - "cp app/config/parameters.yml.travis app/config/parameters.yml"
-  - "cp app/config/config_test.yml.travis app/config/config_test.yml"
   - "bin/console d:d:d --if-exists --force --env=test"
   - "bin/console d:d:c --env=test"
   - "bin/console d:schema:update --force --env=test"
