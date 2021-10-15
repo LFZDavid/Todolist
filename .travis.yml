@@ -9,8 +9,8 @@ warnings_are_errors: false
 
 install: 
   - "composer install -n"
-  - "cp app/config/parameters.yml.travis app/config/parameters.yml"
-  - "cp app/config/config_test.yml.travis app/config/config_test.yml"
+  - "cp travis.env .env"
+  - "cp phpunit.xml.dist.travis phpunit.xml.dist"
   - "bin/console d:d:d --if-exists --force --env=test"
   - "bin/console d:d:c --env=test"
   - "bin/console d:schema:update --force --env=test"
