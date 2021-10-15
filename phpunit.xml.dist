@@ -10,6 +10,10 @@
       <directory>src/*/*Bundle/Resources</directory>
       <directory>src/*/Bundle/*Bundle/Resources</directory>
       <file>src/Kernel.php</file>
+      <file>src/DataFixtures/task_test.yml</file>
+      <file>src/DataFixtures/user_test.yml</file>
+      <file>src/DataFixtures/task.yml</file>
+      <file>src/DataFixtures/user.yml</file>
     </exclude>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
