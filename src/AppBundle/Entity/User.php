@@ -101,6 +101,11 @@ class User implements UserInterface
         $this->roles = $roles;
     }
 
+    public function hasRoles(string $role)
+    {
+        return in_array($role, $this->getRoles());
+    }
+
     public function eraseCredentials()
     {
     }

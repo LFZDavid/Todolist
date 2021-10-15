@@ -4,14 +4,18 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 class UserController extends Controller
 {
     /**
+     *
      * @Route("/users", name="user_list")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function listAction()
     {
@@ -46,6 +50,7 @@ class UserController extends Controller
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(User $user, Request $request)
     {

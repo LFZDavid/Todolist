@@ -124,7 +124,7 @@ class TaskControllerTest extends DefaultControllerTest
 
         /** Check if author is associate to current user*/
         $this->assertSame(
-            $this->getUser('logged')->getId(),
+            $this->getUser('admin')->getId(),
             $persistedTask->getAuthor()->getId()
         );
     }
@@ -310,8 +310,9 @@ class TaskControllerTest extends DefaultControllerTest
     
     public function testDelete():void
     {
-        $task = $this->getTask('toDelete');
-        $client = $this->authClient;
+        $user = $this->getUser('author');
+        $task = $this->taskRepo->findOneBy(['author' => $user->getId()]);
+        $client = $this->getAuthenticateClient($user->getUsername());
         /** Go to task list */
         $crawler = $client->request('GET','/tasks');
 
@@ -330,13 +331,113 @@ class TaskControllerTest extends DefaultControllerTest
         })->form();
 
         $client->submit($form);
-        $crawler = $client->followRedirect();
-        $this->assertContains(
-            'La tâche a bien été supprimée.',
-            $client->getResponse()->getContent()
-        );
 
         /** Check if task isn't in tasklist anymore */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertEquals(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+    }
+
+    /**
+     * display delete btn only if current user can delete task
+     *
+     * @return void
+     */
+    public function testDeleteBtnDisplayForAuthor():void
+    {
+        $user = $this->getUser('author');
+        $author_task = $this->taskRepo->findOneBy(['author' => $user->getId()]);
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $crawler = $client->request('GET','/tasks');
+        $baseUri = $client->getRequest()->getUri().'/';
+        
+        /** check author's task */
+        $btns = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($author_task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$author_task->getId().'/delete'){
+                return false;
+            }
+        });
+        $this->assertGreaterThan(0,$btns->count());
+
+        $else_task = $this->getTask('withoutAuthor');
+        /** check else's task */
+        $btns = $crawler->selectButton('Supprimer')->reduce(function ($node, $i) use($else_task, $baseUri){
+            if($node->form()->getUri() != $baseUri.$else_task->getId().'/delete'){
+                return false;
+            }
+        });
+        $this->assertEquals(0,$btns->count());
+    }
+
+    public function testDeleteBtnDisplayForAdmin():void
+    {
+        $user = $this->getUser('admin');
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $crawler = $client->request('GET','/tasks');
+        $btns = $crawler->selectButton('Supprimer');
+        /** Check that every task has a btn */
+        $this->assertEquals(
+            $btns->count(),
+            $crawler->filter('div.thumbnail')->count()
+        );
+    }
+
+    public function testAuthorCanDeleteOwnTask():void
+    {
+        $user = $this->getUser('author');
+        $task = $this->taskRepo->findOneBy(['author' => $user->getId()]);
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $client->request('POST','/tasks/'.$task->getId().'/delete');
+        
+        
+        /** Check if task is deleted from in db */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertEquals(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+    }
+
+    public function testUserCannotDeleteSomeoneElseTask():void
+    {
+        $task = $this->getTask('toDelete');
+        $client = $this->getAuthenticateClient('Logged');
+        $crawler = $client->request('POST','/tasks/'.$task->getId().'/delete');
+        
+        /** Check if task still present in db */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+        
+    }
+
+    public function testAdminCanDeleteAnyTask():void
+    {
+        $user = $this->getUser('admin');
+        $task = $this->getTask('with_author');
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $client->request('POST','/tasks/'.$task->getId().'/delete');
+        
+        /** Check if task is deleted from in db */
+        $crawler = $client->request('GET','/tasks');
+        $this->assertEquals(
+            0,
+            $crawler->filter('a:contains('.$task->getTitle().')')->count()
+        );
+    }
+
+    public function testAdminCanDeleteAnonymusTask():void
+    {
+        $user = $this->getUser('admin');
+        $task = $this->getTask('withoutAuthor');
+        $client = $this->getAuthenticateClient($user->getUsername());
+        $client->request('POST','/tasks/'.$task->getId().'/delete');
+        
+        /** Check if task is deleted from in db */
         $crawler = $client->request('GET','/tasks');
         $this->assertEquals(
             0,
