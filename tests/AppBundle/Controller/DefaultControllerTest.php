@@ -9,9 +9,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Nelmio\Alice\Loader\NativeLoader;
 use App\DataFixtures\LoadTestFixtures;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -48,17 +49,30 @@ class DefaultControllerTest extends WebTestCase
     public function setUp():void
     {
         self::bootKernel();
-        $this->guestClient = static::createClient();
-        $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
-        $this->userRepo = $this->em->getRepository(User::class);
-        $this->taskRepo = $this->em->getRepository(Task::class);
-        $this->authClient = $this->getAuthenticateClient();
-        $this->fixturesLoader = new LoadTestFixtures();
-        $this->fixturesLoader->load($this->em);
+        $container = self::$container;
+        $this->em = $container->get('doctrine')->getManager();
+        $this->userRepo = $container->get('doctrine')->getRepository(User::class);
+        $this->taskRepo = $container->get('doctrine')->getRepository(Task::class);
+        $this->fixturesLoader = new LoadTestFixtures($container->get(UserPasswordEncoderInterface::class));
+        $this->fixturesLoader->load($this->em, true);
+        self::ensureKernelShutdown();
     }
 
     public function tearDown(): void
     {
+        /** Delete user and task from db */
+        $entities = [
+            $this->userRepo->findAll(),
+            $this->taskRepo->findAll(),
+        ];
+
+        array_map(function($embedTypes){
+            foreach ($embedTypes as $entity) {
+                $this->em->remove($entity);
+            }
+        },$entities);
+
+        $this->em->flush();
         parent::tearDown();
         $this->em->close();
         $this->em = null; // avoid memory leaks
@@ -74,9 +88,9 @@ class DefaultControllerTest extends WebTestCase
      */
     public function getUser(string $type): User
     {
-        $loader = new NativeLoader();
-        $objectSet = $loader->loadFile('src/DataFixtures/user_test.yml');
-        $user = $objectSet->getObjects()['user_'.$type];
+        $user = $this->userRepo->findOneBy(
+            ['username' => $type]
+        );
 
         if($type == 'create'){
             $user = new User();
@@ -95,10 +109,9 @@ class DefaultControllerTest extends WebTestCase
      */
     public function getAuthenticateClient(string $type = 'admin'): Client
     {
-        $user = $this->getUser($type);
         return static::createClient([], [
-            'PHP_AUTH_USER' => $user->getUsername(),
-            'PHP_AUTH_PW'   => '',
+            'PHP_AUTH_USER' => $type,
+            'PHP_AUTH_PW'   => 'test',
         ]);
     }
 
@@ -110,9 +123,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function getTask(string $type): Task
     {
-        $loader = new NativeLoader();
-        $objectSet = $loader->loadFile('src/DataFixtures/task_test.yml');
-        $task = $objectSet->getObjects()['task_'.$type];
+        $task = $this->taskRepo->findOneBy(['title' => $type]);
 
         if($type == 'create'){
             $task = new Task();
@@ -131,24 +142,21 @@ class DefaultControllerTest extends WebTestCase
 
     public final function testIndexGuestRedirectToLogin():void
     {
-        $this->guestClient->request('GET', '/');
-        /** Guest is redirected to login page */
-        $this->assertEquals(Response::HTTP_FOUND, $this->guestClient->getResponse()->getStatusCode());
-        $this->guestClient->followRedirects();
-        $this->assertContains('Redirecting to http://localhost/login',$this->guestClient->getResponse()->getContent());
+        $client = static::createClient();
+        $client->request('GET', '/');
+        $this->assertResponseIsSuccessful();
     }
     
     public final function testGetHomepageWhileLoggedIn():void
     {
-        $this->authClient->request('GET', '/');
-        $response = $this->authClient->getResponse();
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => "logged",
+            'PHP_AUTH_PW'   => 'test',
+        ]);
+        $client->request('GET', '/');
         /** Authenticate user is not redirected to login page */
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertNotEquals(Response::HTTP_FOUND, $response->getStatusCode());
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         /** Looking for unique message from homepage */
-        $this->assertContains(
-            "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", 
-            $response->getContent()
-        );
+        $this->assertSelectorTextContains('h1', "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !");
     }
 }

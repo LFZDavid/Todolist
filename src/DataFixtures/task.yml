@@ -1,5 +1,5 @@
-parameters:
-    hash: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+# parameters:
+#     password: test #test
 
 App\Entity\Task:
   task_{1..10}:
@@ -16,5 +16,5 @@ App\Entity\Task:
 App\Entity\User:
   author:
     username: author
-    password: <{hash}> 
+    password: test
     email: <email()>

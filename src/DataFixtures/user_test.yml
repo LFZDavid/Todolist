@@ -1,26 +1,26 @@
-parameters:
-    hash: $2y$13$UyLMbc7BG.ViQlfaItfD7.piuPWtRxSDIPfTwiBXUSd6v.uzbLTSO #test
+# parameters:
+#     hash: test #test
 
 App\Entity\User:
   
   user_logged:
     username: logged
-    password: <{hash}> 
+    password: test
     email: <email()>
   
   user_login:
     username: login
-    password: <{hash}> 
+    password: test
     email: <email()>
   
   user_edit:
     username: edit
-    password: <{hash}> 
+    password: test
     email: <email()>
   
   user_admin:
     username: admin
-    password: <{hash}> 
+    password: test
     email: <email()>
     roles: ["ROLE_ADMIN"]
   

@@ -14,7 +14,7 @@
         }
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=7.1.3",
         "symfony/framework-bundle": "4.4.*",
         "symfony/flex": "^1.3.1",
         "doctrine/orm": "^2.10",
@@ -29,7 +29,12 @@
         "symfony/dotenv": "4.4.*",
         "doctrine/annotations": "^1.13",
         "symfony/asset": "4.4.*",
-        "doctrine/doctrine-fixtures-bundle": "^3.4"
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "symfony/css-selector": "4.4.*",
+        "symfony/twig-bridge": "4.4.*",
+        "symfony/form": "4.4.*",
+        "symfony/security": "4.4.*",
+        "symfony/expression-language": "4.4.*"
     },
     "conflict": {
         "symfony/symfony": "*",
@@ -44,7 +49,6 @@
         "symfony/debug-bundle": "4.4.*",
         "symfony/web-profiler-bundle": "4.4.*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/css-selector": "4.4.*",
         "symfony/phpunit-bridge": "^5.3"
     },
     "scripts": {
@@ -68,5 +72,10 @@
             "bin/console d:schema:update --force -e test"
         ]
     },
-    "extra": {}
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.4.*"
+        }
+    }
 }
