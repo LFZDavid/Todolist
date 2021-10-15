@@ -9,6 +9,7 @@
       <directory>src/*Bundle/Resources</directory>
       <directory>src/*/*Bundle/Resources</directory>
       <directory>src/*/Bundle/*Bundle/Resources</directory>
+      <file>src/Kernel.php</file>
     </exclude>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
