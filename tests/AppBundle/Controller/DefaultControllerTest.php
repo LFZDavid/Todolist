@@ -7,7 +7,6 @@ use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Nelmio\Alice\Loader\NativeLoader;
 use App\DataFixtures\LoadTestFixtures;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -140,13 +139,6 @@ class DefaultControllerTest extends WebTestCase
 
     /************** Tests *******************/
 
-    public final function testIndexGuestRedirectToLogin():void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/');
-        $this->assertResponseIsSuccessful();
-    }
-    
     public final function testGetHomepageWhileLoggedIn():void
     {
         $client = static::createClient([], [
