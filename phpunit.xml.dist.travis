@@ -33,7 +33,7 @@
     <!-- DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db" -->
     <!-- DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7" -->
 
-    <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3306/todolist_test?serverVersion=5.7&amp;charset=utf8"/>
+    <env name="DATABASE_URL" value="mysql://root@127.0.0.1:3306/todolist_test?serverVersion=5.7&amp;charset=utf8"/>
     <!-- ###- doctrine/doctrine-bundle ### -->
   </php>
   <testsuites>
