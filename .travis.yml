@@ -8,9 +8,9 @@ cache:
 warnings_are_errors: false
 
 install: 
-  - "composer install -n"
   - "cp travis.env .env"
   - "cp phpunit.xml.dist.travis phpunit.xml.dist"
+  - "composer install -n"
   - "bin/console d:d:d --if-exists --force --env=test"
   - "bin/console d:d:c --env=test"
   - "bin/console d:schema:update --force --env=test"
