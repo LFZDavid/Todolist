@@ -56,7 +56,6 @@ services:
             MAILER_DSN: smtp://maildev:25
             SYMFONY__DB_HOST: db
             SYMFONY__DB_PWD: root
-
         volumes: 
             - .:/var/www/html
             - ./.docker/host:/etc/apache2/sites-enabled

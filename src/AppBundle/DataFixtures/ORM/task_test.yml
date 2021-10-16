@@ -30,6 +30,17 @@ AppBundle\Entity\Task:
     isDone: false
     author: "@author"
 
+  task_done{1..5}:
+    title: <current()>
+    content: <text(100)>
+    isDone: true
+  
+  task_not_done{1..5}:
+    title: <current()>
+    content: <text(100)>
+    isDone: false
+
+
 AppBundle\Entity\User:
   author:
     username: author
