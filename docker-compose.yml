@@ -69,6 +69,7 @@ services:
     blackfire:
         container_name: todolist_blackfire
         image: blackfire/blackfire:2
+        env_file: .env.local.blackfire
         ports: ["8307"]
         environment:
             # Exposes BLACKFIRE_* environment variables from the host

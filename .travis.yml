@@ -5,6 +5,7 @@ php:
 env:
   global:
       - XDEBUG_MODE=coverage
+      - CC_TEST_REPORTER_ID=b0711a2048f7cc7a4eb968540e5fb960ec771aefcc565ea0e7d1aa2631fcdbba
 cache:
     directories:
         - $HOME/.composer/cache
@@ -17,9 +18,18 @@ install:
   - "bin/console d:d:d --if-exists --force --env=test"
   - "bin/console d:d:c --env=test"
   - "bin/console d:schema:update --force --env=test"
+
+before_script: 
+  - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
+  - "chmod +x ./cc-test-reporter"
+  - "./cc-test-reporter before-build"
+  
 scritpt:
   - "mkdir -p build/logs"
   - "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml"
+
+after_script: 
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 after_success:
   - "php php-coveralls.phar"
