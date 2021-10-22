@@ -34,7 +34,8 @@
         "symfony/twig-bridge": "4.4.*",
         "symfony/form": "4.4.*",
         "symfony/security": "4.4.*",
-        "symfony/expression-language": "4.4.*"
+        "symfony/expression-language": "4.4.*",
+        "blackfire/php-sdk": "^1.27"
     },
     "conflict": {
         "symfony/symfony": "*",

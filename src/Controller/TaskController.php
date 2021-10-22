@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Repository\TaskRepository;
 use App\Security\TaskVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,27 +16,27 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction()
+    public function listAction(TaskRepository $taskRepo)
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findAll()]);
     }
 
     /**
      * @Route("/tasks_todo", name="tasks_todo")
      *
      */
-    public function listTodo()
+    public function listTodo(TaskRepository $taskRepo)
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => '0'])]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findBy(['isDone' => '0'])]);
     }
 
     /**
      * @Route("/tasks_done", name="tasks_done")
      *
      */
-    public function listDone()
+    public function listDone(TaskRepository $taskRepo)
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => '1'])]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findBy(['isDone' => '1'])]);
     }
 
     /**

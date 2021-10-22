@@ -1,4 +1,10 @@
 {
+    "blackfire/php-sdk": {
+        "version": "v1.27.0"
+    },
+    "composer/ca-bundle": {
+        "version": "1.2.11"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {

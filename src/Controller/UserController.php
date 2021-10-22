@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -14,14 +15,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
+
     /**
      *
      * @Route("/users", name="user_list")
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function listAction()
+    public function listAction(UserRepository $userRepo)
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:User')->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $userRepo->findAll()]);
     }
 
     /**
@@ -34,11 +36,10 @@ class UserController extends AbstractController
         /**Allow admin to manage roles */
         if (
             $this->getUser()
-            && in_array('ROLE_ADMIN', $this->getUser()->getRoles())
+            && $this->getUser()->hasRoles('ROLE_ADMIN')
         ) {
             $form->add('roles', ChoiceType::class,[
                 'choices' => [
-                    // 'Utilisateur' => 'ROLE_USER',
                     'Admin' => 'ROLE_ADMIN',
                 ],
                 'expanded'=> true,
@@ -72,20 +73,13 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user);
 
-        /**Allow admin to manage roles */
-        if (
-            $this->getUser()
-            && in_array('ROLE_ADMIN', $this->getUser()->getRoles())
-        ) {
-            $form->add('roles', ChoiceType::class,[
-                'choices' => [
-                    // 'Utilisateur' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                ],
-                'expanded'=> true,
-                'multiple'=> true,
-            ]);
-        }
+        $form->add('roles', ChoiceType::class,[
+            'choices' => [
+                'Admin' => 'ROLE_ADMIN',
+            ],
+            'expanded'=> true,
+            'multiple'=> true,
+        ]);
 
         $form->handleRequest($request);
 
