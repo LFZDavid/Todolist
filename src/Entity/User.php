@@ -87,7 +87,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles()
+    public function getRoles():array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -101,7 +101,7 @@ class User implements UserInterface
         $this->roles = $roles;
     }
 
-    public function hasRoles(string $role)
+    public function hasRole(string $role)
     {
         return in_array($role, $this->getRoles());
     }

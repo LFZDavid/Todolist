@@ -33,7 +33,7 @@
 								{% endif %}
 							</button>
 						</form>
-						{% if (app.user and ((task.author == app.user) or (app.user.hasRoles("ROLE_ADMIN")))) %}
+						{% if (app.user and ((task.author == app.user) or (app.user.hasRole("ROLE_ADMIN")))) %}
 							<form action="{{ path('task_delete', {'id' : task.id }) }}">
 								<button class="btn btn-danger btn-sm pull-right">Supprimer</button>
 							</form>

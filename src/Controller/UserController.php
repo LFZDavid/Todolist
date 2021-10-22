@@ -41,7 +41,7 @@ class UserController extends AbstractController
         /**Allow admin to manage roles */
         if (
             $this->getUser()
-            && $this->getUser()->hasRoles('ROLE_ADMIN')
+            && $this->getUser()->hasRole('ROLE_ADMIN')
         ) {
             $form->add('roles', ChoiceType::class,[
                 'choices' => [
