@@ -167,4 +167,35 @@ class UserControllerTest extends DefaultControllerTest
             )
         );
     }
+
+    public function testUserCantSetRoleOnCreation():void
+    {
+        $client = $this->getAuthenticateClient('edit');
+        $crawler = $client->request('GET','/users/create');
+        $this->assertEquals(
+            0,
+            $crawler->filter('#user_roles')->count()
+        );
+    }
+    
+    public function testAdminCanSetRoleOnCreation():void
+    {
+        $client = $this->getAuthenticateClient('admin');
+        $crawler = $client->request('GET','/users/create');
+        $this->assertEquals(
+            1,
+            $crawler->filter('#user_roles')->count()
+        );
+    }
+    
+    public function testAdminCanSetRoleOnEdit():void
+    {
+        $user = $this->getUser('edit');
+        $client = $this->getAuthenticateClient('admin');
+        $crawler = $client->request('GET','/users/'.$user->getId().'/edit');
+        $this->assertEquals(
+            1,
+            $crawler->filter('#user_roles')->count()
+        );
+    }
 }

@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
@@ -30,6 +31,21 @@ class UserController extends Controller
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
+        /**Allow admin to manage roles */
+        if (
+            $this->getUser()
+            && in_array('ROLE_ADMIN', $this->getUser()->getRoles())
+        ) {
+            $form->add('roles', ChoiceType::class,[
+                'choices' => [
+                    // 'Utilisateur' => 'ROLE_USER',
+                    'Admin' => 'ROLE_ADMIN',
+                ],
+                'expanded'=> true,
+                'multiple'=> true,
+            ]);
+        }
+        
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -55,6 +71,21 @@ class UserController extends Controller
     public function editAction(User $user, Request $request)
     {
         $form = $this->createForm(UserType::class, $user);
+
+        /**Allow admin to manage roles */
+        if (
+            $this->getUser()
+            && in_array('ROLE_ADMIN', $this->getUser()->getRoles())
+        ) {
+            $form->add('roles', ChoiceType::class,[
+                'choices' => [
+                    // 'Utilisateur' => 'ROLE_USER',
+                    'Admin' => 'ROLE_ADMIN',
+                ],
+                'expanded'=> true,
+                'multiple'=> true,
+            ]);
+        }
 
         $form->handleRequest($request);
 

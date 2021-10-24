@@ -21,4 +21,5 @@ scritpt:
 after_success:
   - "php php-coveralls.phar"
 services: 
-  - mysql 
+  - mysql
+
