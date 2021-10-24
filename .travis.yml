@@ -1,19 +1,24 @@
 --- 
-before_install: 
-  - "sudo rm /usr/local/bin/docker-compose"
-  - "curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose"
-  - "chmod +x docker-compose"
-  - "sudo mv docker-compose /usr/local/bin"
-env: 
-  - DOCKER_COMPOSE_VERSION=3.9
 language: php
 php: 
   - "7.1"
-script: 
-  - "composer install"
-  - "docker-compose exec web php bin/console d:d:d --if-exists --force --env=test"
-  - "docker-compose exec web php bin/console d:d:c --env=test"
-  - "docker-compose exec web php bin/console d:schema:update --force --env=test"
-  - vendor/bin/phpunit
+cache:
+    directories:
+        - $HOME/.composer/cache
+warnings_are_errors: false
+
+install: 
+  - "composer install -n"
+  - "cp app/config/parameters.yml.travis app/config/parameters.yml"
+  - "cp app/config/config_test.yml.travis app/config/config_test.yml"
+  - "bin/console d:d:d --if-exists --force --env=test"
+  - "bin/console d:d:c --env=test"
+  - "bin/console d:schema:update --force --env=test"
+scritpt:
+  - "mkdir -p build/logs"
+  - "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml"
+
+after_success:
+  - "php php-coveralls.phar"
 services: 
-  - docker
+  - mysql 

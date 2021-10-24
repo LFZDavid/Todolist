@@ -18,11 +18,11 @@ swiftmailer:
 doctrine:
     dbal:
         dbname:   todolist_test
-        host: '%db_host%'
+        host: 127.0.0.1
         user: root
-        password: '%db_pwd%'
+        password: ~
 
 security:
     firewalls:
         main:
-            http_basic: ~
+            http_basic: ~ 
