@@ -14,18 +14,17 @@ class TaskVoter extends Voter
 
     protected function supports($attr, $subject)
     {
-        if(!in_array($attr, [self::DELETE])){
+        if (!in_array($attr, [self::DELETE])) {
             return false;
         }
 
-        if(!$subject instanceof Task) {
+        if (!$subject instanceof Task) {
             // @codeCoverageIgnoreStart
             return false;
             // @codeCoverageIgnoreEnd
         }
     
         return true;
-        
     }
 
     protected function voteOnAttribute($attribute, $task, TokenInterface $token): bool
@@ -34,7 +33,7 @@ class TaskVoter extends Voter
         $user = $token->getUser();
 
         
-        if(!$user instanceof User){
+        if (!$user instanceof User) {
             // @codeCoverageIgnoreStart
             return false;
             // @codeCoverageIgnoreEnd
@@ -59,7 +58,4 @@ class TaskVoter extends Voter
     {
         return $task->getAuthor() == $user;
     }
-
-
-
 }

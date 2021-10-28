@@ -32,15 +32,12 @@ class UserController extends AbstractController
     public function createAction(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $em
-    ){
+        EntityManagerInterface $manager
+    ) {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         /**Allow admin to manage roles */
-        if (
-            $this->getUser()
-            && $this->getUser()->hasRole('ROLE_ADMIN')
-        ){
+        if ($this->getUser()&& $this->getUser()->hasRole('ROLE_ADMIN')) {
             $form->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => 'ROLE_ADMIN',
@@ -56,8 +53,8 @@ class UserController extends AbstractController
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $em->persist($user);
-            $em->flush();
+            $manager->persist($user);
+            $manager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -75,8 +72,8 @@ class UserController extends AbstractController
         User $user,
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $em
-    ){
+        EntityManagerInterface $manager
+    ) {
         $form = $this->createForm(UserType::class, $user);
 
         $form->add('roles', ChoiceType::class, [
@@ -93,7 +90,7 @@ class UserController extends AbstractController
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $em->flush();
+            $manager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 

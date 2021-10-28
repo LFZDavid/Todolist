@@ -35,7 +35,7 @@ class LoadTestFixtures extends Fixture implements FixtureInterface
         }
         $objectSet = $loader->loadFile('src/DataFixtures/task_test.yml');
         foreach ($objectSet->getObjects() as $item) {
-            if ($item instanceof User){
+            if ($item instanceof User) {
                 $item->setPassword($this->encoder->encodePassword($item, 'test'));
             }
             $manager->persist($item);
