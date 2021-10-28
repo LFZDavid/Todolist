@@ -13,7 +13,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
 class UserController extends AbstractController
 {
 
@@ -31,19 +30,18 @@ class UserController extends AbstractController
      * @Route("/users/create", name="user_create")
      */
     public function createAction(
-        Request $request, 
-        UserPasswordEncoderInterface $passwordEncoder, 
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
         EntityManagerInterface $em
-    )
-    {
+    ){
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         /**Allow admin to manage roles */
         if (
             $this->getUser()
             && $this->getUser()->hasRole('ROLE_ADMIN')
-        ) {
-            $form->add('roles', ChoiceType::class,[
+        ){
+            $form->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => 'ROLE_ADMIN',
                 ],
@@ -74,15 +72,14 @@ class UserController extends AbstractController
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function editAction(
-        User $user, 
-        Request $request, 
-        UserPasswordEncoderInterface $passwordEncoder, 
+        User $user,
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
         EntityManagerInterface $em
-    )
-    {
+    ){
         $form = $this->createForm(UserType::class, $user);
 
-        $form->add('roles', ChoiceType::class,[
+        $form->add('roles', ChoiceType::class, [
             'choices' => [
                 'Admin' => 'ROLE_ADMIN',
             ],
