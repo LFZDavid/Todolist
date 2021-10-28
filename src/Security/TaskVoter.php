@@ -51,7 +51,6 @@ class TaskVoter extends Voter
         // @codeCoverageIgnoreStart
         throw new \LogicException("This code should not be reached!");
         // @codeCoverageIgnoreEnd
-        
     }
 
     private function canDelete(Task $task, User $user): bool
