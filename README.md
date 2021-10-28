@@ -41,20 +41,20 @@ more infos on : [Symfony documentation](https://symfony.com/doc/3.1/setup/web_se
 >
 >_`dev/prod :`_
 >```
->bin/console d:d:d --if-exists --force
->bin/console d:d:c
->bin/console d:schema:update --force
+>bin/console doctrine:database:drop --if-exists --force
+>bin/console doctrine:database:create
+>bin/console doctrine:schema:update --force
 >```
 >_`test :`_
 >```
->bin/console d:d:d --if-exists --force --env=test
->bin/console d:d:c --env=test
->bin/console d:schema:update --force --env=test
+>bin/console doctrine:database:drop --if-exists --force --env=test
+>bin/console doctrine:database:create --env=test
+>bin/console doctrine:schema:update --force --env=test
 >```
 
 >### Install demo data: _( `optional` )_
 >    ```
->    bin/console d:f:l
+>    bin/console doctrine:fixtures:load
 >    ```
 
 ---
