@@ -17,7 +17,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction(TaskRepository $taskRepo)
+    public function list(TaskRepository $taskRepo)
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findAll()]);
     }
@@ -44,7 +44,7 @@ class TaskController extends AbstractController
      * @Route("/tasks/create", name="task_create")
      * @IsGranted("ROLE_USER")
      */
-    public function createAction(Request $request, EntityManagerInterface $manager)
+    public function create(Request $request, EntityManagerInterface $manager)
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -67,7 +67,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
-    public function editAction(Task $task, Request $request, EntityManagerInterface $manager)
+    public function edit(Task $task, Request $request, EntityManagerInterface $manager)
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -90,7 +90,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task, EntityManagerInterface $manager)
+    public function toggleTask(Task $task, EntityManagerInterface $manager)
     {
         $task->toggle(!$task->isDone());
         $manager->flush();
@@ -103,7 +103,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task, EntityManagerInterface $manager)
+    public function deleteTask(Task $task, EntityManagerInterface $manager)
     {
         $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task, 'Vous ne pouvez pas supprimer cette tache!');
         
