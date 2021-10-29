@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
@@ -31,7 +30,6 @@ class UserController extends AbstractController
      */
     public function create(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
         EntityManagerInterface $manager
     ) {
         $user = new User();
@@ -50,8 +48,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
 
             $manager->persist($user);
             $manager->flush();
@@ -71,7 +67,6 @@ class UserController extends AbstractController
     public function edit(
         User $user,
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
         EntityManagerInterface $manager
     ) {
         $form = $this->createForm(UserType::class, $user);
@@ -87,8 +82,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
 
             $manager->flush();
 
