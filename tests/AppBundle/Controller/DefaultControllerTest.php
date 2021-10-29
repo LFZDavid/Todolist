@@ -139,6 +139,15 @@ class DefaultControllerTest extends WebTestCase
 
     /************** Tests *******************/
 
+    public final function testIndexGuestRedirectToLogin():void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/');
+        $client->followRedirects();
+        /** Guest is redirected to login page */
+        $this->assertResponseRedirects('/login');
+    }
+
     public final function testGetHomepageWhileLoggedIn():void
     {
         $client = static::createClient([], [
