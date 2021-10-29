@@ -8,6 +8,7 @@ use App\Security\TaskVoter;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +18,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function list(TaskRepository $taskRepo)
+    public function list(TaskRepository $taskRepo): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findAll()]);
     }
@@ -26,7 +27,7 @@ class TaskController extends AbstractController
      * @Route("/tasks_todo", name="tasks_todo")
      *
      */
-    public function listTodo(TaskRepository $taskRepo)
+    public function listTodo(TaskRepository $taskRepo): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findBy(['isDone' => '0'])]);
     }
@@ -35,7 +36,7 @@ class TaskController extends AbstractController
      * @Route("/tasks_done", name="tasks_done")
      *
      */
-    public function listDone(TaskRepository $taskRepo)
+    public function listDone(TaskRepository $taskRepo): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepo->findBy(['isDone' => '1'])]);
     }
@@ -44,7 +45,7 @@ class TaskController extends AbstractController
      * @Route("/tasks/create", name="task_create")
      * @IsGranted("ROLE_USER")
      */
-    public function create(Request $request, EntityManagerInterface $manager)
+    public function create(Request $request, EntityManagerInterface $manager): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -67,7 +68,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
-    public function edit(Task $task, Request $request, EntityManagerInterface $manager)
+    public function edit(Task $task, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -90,7 +91,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTask(Task $task, EntityManagerInterface $manager)
+    public function toggleTask(Task $task, EntityManagerInterface $manager): Response
     {
         $task->toggle(!$task->isDone());
         $manager->flush();
@@ -103,7 +104,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTask(Task $task, EntityManagerInterface $manager)
+    public function deleteTask(Task $task, EntityManagerInterface $manager): Response
     {
         $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task, 'Vous ne pouvez pas supprimer cette tache!');
         

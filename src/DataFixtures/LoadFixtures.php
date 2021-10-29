@@ -22,7 +22,7 @@ class LoadFixtures extends Fixture implements FixtureInterface
         $this->encoder = $encoder;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $loader = new NativeLoader();
         $objectSet = $loader->loadFile('src/DataFixtures/user.yml');
@@ -37,7 +37,7 @@ class LoadFixtures extends Fixture implements FixtureInterface
         $manager->flush();
     }
 
-    public function nameForTests()
+    public function nameForTests(): string
     {
         $genera = [
             'Dockerize project',

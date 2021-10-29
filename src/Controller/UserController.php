@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -20,7 +21,7 @@ class UserController extends AbstractController
      * @Route("/users", name="user_list")
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function list(UserRepository $userRepo)
+    public function list(UserRepository $userRepo): Response
     {
         return $this->render('user/list.html.twig', ['users' => $userRepo->findAll()]);
     }
@@ -31,7 +32,7 @@ class UserController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $manager
-    ) {
+    ): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         /**Allow admin to manage roles */
@@ -66,7 +67,7 @@ class UserController extends AbstractController
         User $user,
         Request $request,
         EntityManagerInterface $manager
-    ) {
+    ): Response {
         $form = $this->createForm(UserType::class, $user);
 
         $form->add('roles', ChoiceType::class, [

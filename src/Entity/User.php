@@ -44,19 +44,20 @@ class User implements UserInterface
      */
     private $roles = [];
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setUsername($username)
+    public function setUsername($username): self
     {
         $this->username = $username;
+        return $this;
     }
 
     public function getSalt()
@@ -64,24 +65,26 @@ class User implements UserInterface
         return null;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword($password): self
     {
         $this->password = $password;
+        return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail($email)
+    public function setEmail($email): self
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -96,17 +99,18 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+        return $this;
     }
 
-    public function hasRole(string $role)
+    public function hasRole(string $role): bool
     {
         return in_array($role, $this->getRoles());
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 }

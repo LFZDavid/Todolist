@@ -52,59 +52,63 @@ class Task
         $this->isDone = false;
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): Datetime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
+        return $this;
     }
 
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
+        return $this;
     }
 
-    public function isDone()
+    public function isDone(): bool
     {
         return $this->isDone;
     }
 
-    public function setIsDone($flag)
+    public function setIsDone($flag): self
     {
         $this->isDone = $flag;
 
         return $this;
     }
 
-    public function toggle($flag)
+    public function toggle($flag): self
     {
         $this->isDone = $flag;
+        return $this;
     }
 
-    public function setAuthor(?User $author)
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 

@@ -22,7 +22,7 @@ class LoadTestFixtures extends Fixture implements FixtureInterface
         $this->encoder = $encoder;
     }
 
-    public function load(ObjectManager $manager, $test = false)
+    public function load(ObjectManager $manager, $test = false): void
     {
         if (!$test) {
             return;

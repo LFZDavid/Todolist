@@ -12,7 +12,7 @@ class TaskVoter extends Voter
 {
     const DELETE = 'delete';
 
-    protected function supports($attr, $subject)
+    protected function supports($attr, $subject): bool
     {
         if (!in_array($attr, [self::DELETE])) {
             return false;
