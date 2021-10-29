@@ -1,7 +1,7 @@
-FROM gbrayhan/php74-xdebug
+FROM php:7.4-apache
 
 RUN apt-get update && apt-get install -y libzip-dev zip \
-    && docker-php-ext-install zip pdo_mysql pdo exif
+    && docker-php-ext-install zip pdo_mysql pdo exif opcache
 
 RUN apt-get -y update \
 && apt-get install -y libicu-dev \ 
