@@ -12,11 +12,11 @@ class SaveUserListener
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
-       $this->passwordEncoder = $passwordEncoder;
+        $this->passwordEncoder = $passwordEncoder;
     }
     public function prePersist(User $user, LifecycleEventArgs $event): void
     {
-        if($_ENV['APP_ENV'] !== "test"){
+        if ($_ENV['APP_ENV'] !== "test") {
             // @codeCoverageIgnoreStart
             $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPassword()));
             // @codeCoverageIgnoreEnd
