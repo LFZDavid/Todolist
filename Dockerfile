@@ -17,6 +17,10 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 
+# Apcu
+RUN pecl install apcu \
+  && docker-php-ext-enable apcu
+
 RUN a2enmod rewrite
 RUN service apache2 restart
 
