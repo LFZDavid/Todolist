@@ -27,7 +27,6 @@ class LoadFixtures extends Fixture implements FixtureInterface
         $loader = new NativeLoader();
         $objectSet = $loader->loadFile('src/DataFixtures/user.yml');
         foreach ($objectSet->getObjects() as $user) {
-            $user->setPassword($this->encoder->encodePassword($user, 'test'));
             $manager->persist($user);
         }
         $objectSet = $loader->loadFile('src/DataFixtures/task.yml');
