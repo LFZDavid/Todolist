@@ -1,12 +1,31 @@
 # Audit de perfomance et de qualité
 
 ## Sommaire
+1. Audit technique
+  * Security:Check
+  * Composer Outdated
+  * Analyse CodeClimate
+  * Review du code
+    * Assertions Entitées
+    * Contraintes dans les formulaire
+    * Commentaires
+    * Injection de dépendances
+    * Spécification des verbes HTTP pour les routes
+    * Setter manquant pour l'attribut `isDone` de Task::class
+    * Params non utilisé
 
-## Rappel du contexte
----
-## Qualité du code
+  * Tests manuels
+    * Boutons de navigation
+    * Fichiers manquant (console)
+  * Dette technique
+    * Version Symfony
+    * Version PHP
 
-### Dette technique
+2. Audit de performance
+  * Analyse des routes
+  * Solution Amélioration des performances
+
+
 #### Version php (<= 7.1.33)
 #### Version framework (3.1)
 
@@ -62,21 +81,9 @@ nb : certaine partie du code ont été volontairement exclue du coverage. (ex: r
 
 #### Setter manquant pour l'attribut `isDone` de Task::class
 >![fix_add_setIsDone](img/fix_add_setIsDone.png)
-#### __Pages d'erreurs__
 
-
-
-
-<!-- ### Résultat
-## Performance
-### Outils utilisés
-##### Blackfire
-### Mesures
-### Mise en oeuvre
-### Résultat
-### Suggestions d'améliorations
-#### Upgrage -->
-
+#### Paramètre non utilisé
+La methode `loginAction` de la classe `SecurityController` requière en argument `$request` ( instance de la classe `Request` ) or celui-ci n'est pas utilisé dans la methode. Il est donc préférable de le retirer.
 
 ##### Symfony
 Migration vers la dernière version LTS de symfony (`4.4`).
