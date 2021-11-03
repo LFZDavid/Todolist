@@ -67,8 +67,7 @@ nb : certaine partie du code ont été volontairement exclue du coverage. (ex: r
 
 
 
-### Résultat
----
+<!-- ### Résultat
 ## Performance
 ### Outils utilisés
 ##### Blackfire
@@ -76,6 +75,61 @@ nb : certaine partie du code ont été volontairement exclue du coverage. (ex: r
 ### Mise en oeuvre
 ### Résultat
 ### Suggestions d'améliorations
+#### Upgrage -->
+
+
+##### Symfony
+Migration vers la dernière version LTS de symfony (`4.4`).
+##### PHP
+L'upgrade de version Symfony permet notamment d'utiliser des versions supérieurs de PHP (>=7.1.3). Il est donc recommandé d'utiliser la version `7.4` voir même la version `8` qui est également supportée.
+##### Dépendances
+L'utilisation d'une version supérieur de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.
+Voici une liste non-exaustives des packages concernés : 
+* sensio/framework-extra-bundle : mise à jour de la version `3.0` vers `5.1`
+* phpunit/phpunit : mise à jour de la version `5.0` vers `9.5`
+* nelmio/alice : mise à jour de la version `2.1` vers `3.0`
+* symfony/profiler : mise à jour de la version `1.0` vers `4.4`
+* symfony/security : composant de sécurité
+* symfony/validator : validation de création/édition d'entité
+* symfony/dotenv : gestion de variables d'environement
+* symfony/form : gestion de variables d'environement
+* php-coveralls : rapport de couverture de tests
+
+##### Mise à jour de la structure des fichiers
+Afin de correspondre au fonctionnement de la version 4 de Symfony et en particulier `Symfony Flex`, la structure des fichiers doit être modifiée comme suis : 
+```
+dossier-principale/
+├── assets/
+├── bin/
+│   └── console
+├── config/
+│   ├── bundles.php
+│   ├── packages/
+│   ├── routes.yaml
+│   └── services.yaml
+├── public/
+│   └── index.php
+├── src/
+│   ├── ...
+│   └── Kernel.php
+├── templates/
+├── tests/
+├── translations/
+├── var/
+└── vendor/
+```
+#### Bonnes pratiques
+* Création de class Repositories récupéré par injections de dépendances
+* Utiliser la classe EntityManager au lieu de ObjectManager
+* Utilisation de Listener pour l'encodage du mot de passe utilisateur
+* Suppression du suffix "Action" dans les noms de methods des controller
+* Utilisation de Voter pour la gestion des `Task`
+* Ajout de page d'erreurs personnalisée
+
+#### Composant de sécurité
+L'installation du package de sécurité permet une gestion simplifiée des accès au différentes parties de l'application.
+
+##### Mise en place d'un cache
 ##### unicité task::title
 ##### minLength Entities::attr
 ##### Mise en place d'un cache
