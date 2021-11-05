@@ -149,7 +149,7 @@ C'est sur cette version qu'a été fait cet audit.<br>
 # Améliorations
 ---
 ## __Dockerization__
-La mise en place de Docker permet créer des environements identiques sur toutes les machines sur lesquelles l'application sera installée. Celà permet entre autres de faire en sorte que tous les développeurs travaillant sur le même projet puisse facilement et rapidement disposer d'éxactement le même environement (version php, mysql, etc...).
+L'intégration de Docker permet de facilement et rapidement configurer un environement complet qui pourra être installé sur nimporte quel machine. Celà permet entre autres, de fournir à tous les développeurs travaillant sur le même projet, un environement identique (version et extensions php, version mysql, services annexes,etc...).
 
 [Lien vers la pull request : Dockerize](https://github.com/LFZDavid/Todolist/pull/2/files)
 modules php (xdebug, opcache)
