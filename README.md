@@ -28,31 +28,48 @@ more infos on : [Symfony documentation](https://symfony.com/doc/3.1/setup/web_se
 >git clone https://github.com/LFZDavid/Todolist.git
 >```
 
+>### Run Containers
+>```
+>cd Todolist
+>```
+>```
+>cd docker-compose up -d
+>```
+
 >### Install dependencies : 
 >```
->cd Todolist/
 >docker exec -i todolist_web composer install
 >```
 
->### Database :
+>### Install database on environments:
 >
 >_`dev/prod :`_
 >```
 >docker exec -i todolist_web bin/console doctrine:database:drop --if-exists --force
+>```
+>```
 >docker exec -i todolist_web bin/console doctrine:database:create
+>```
+>```
 >docker exec -i todolist_web bin/console doctrine:schema:update --force
 >```
+
 >_`test :`_
 >```
 >docker exec -i todolist_web bin/console doctrine:database:drop --if-exists --force --env=test
+>```
+>```
 >docker exec -i todolist_web bin/console doctrine:database:create --env=test
+>```
+>```
 >docker exec -i todolist_web bin/console doctrine:schema:update --force --env=test
 >```
 
->### Install demo data: _( `optional` )_
+>### Load fixtures: _( `optional` )_
 >    ```
 >    docker exec -i todolist_web bin/console doctrine:fixtures:load
 >    ```
+><br>
 
 ---
 
