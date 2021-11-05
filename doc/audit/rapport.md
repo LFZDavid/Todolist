@@ -223,6 +223,11 @@ dossier-principale/
 
 # Gains de performances
 
+Gain moyen de temps : 65,6% <br>
+Gain utilisation processeur 65,7%: <br>
+Gain utilisation mémoire 75,5%: <br>
+
+
 ### __Home__
 >Page d'accueil
 ><img src="img/bf_develop/homepage.png">
