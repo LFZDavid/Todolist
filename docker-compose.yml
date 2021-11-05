@@ -66,19 +66,19 @@ services:
         networks: 
             - todolist
 
-    blackfire:
-        container_name: todolist_blackfire
-        image: blackfire/blackfire:2
-        env_file: .env.local.blackfire
-        ports: ["8307"]
-        environment:
-            # Exposes BLACKFIRE_* environment variables from the host
-            BLACKFIRE_SERVER_ID: $BLACKFIRE_SERVER_ID
-            BLACKFIRE_SERVER_TOKEN: $BLACKFIRE_SERVER_TOKEN
-            BLACKFIRE_CLIENT_ID: $BLACKFIRE_CLIENT_ID
-            BLACKFIRE_CLIENT_TOKEN: $BLACKFIRE_CLIENT_TOKEN
-        networks: 
-            - todolist
+    # blackfire:
+    #     container_name: todolist_blackfire
+    #     image: blackfire/blackfire:2
+    #     env_file: .env.local.blackfire
+    #     ports: ["8307"]
+    #     environment:
+    #         # Exposes BLACKFIRE_* environment variables from the host
+    #         BLACKFIRE_SERVER_ID: $BLACKFIRE_SERVER_ID
+    #         BLACKFIRE_SERVER_TOKEN: $BLACKFIRE_SERVER_TOKEN
+    #         BLACKFIRE_CLIENT_ID: $BLACKFIRE_CLIENT_ID
+    #         BLACKFIRE_CLIENT_TOKEN: $BLACKFIRE_CLIENT_TOKEN
+    #     networks: 
+    #         - todolist
 
 volumes: 
     db-data:

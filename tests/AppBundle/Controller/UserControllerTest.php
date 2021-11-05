@@ -94,16 +94,16 @@ class UserControllerTest extends DefaultControllerTest
         /** Check user infos */
         $this->assertContains(
             $user->getUsername(), 
-            $crawler->filter("#user_username")->first()->extract('value')
+            $crawler->filter("#user_username")->first()->extract(['value'])
         );
         $this->assertContains(
             $user->getEmail(), 
-            $crawler->filter("#user_email")->first()->extract('value')
+            $crawler->filter("#user_email")->first()->extract(['value'])
         );
         /**Roles */
         $this->assertSame(
             in_array("ROLE_ADMIN", $user->getRoles()), 
-            !empty($crawler->filter("#user_roles>label>input")->first()->extract('checked'))
+            !empty($crawler->filter("#user_roles>label>input")->first()->extract(['checked']))
         );
     }
 
