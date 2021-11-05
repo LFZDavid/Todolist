@@ -22,6 +22,42 @@ more infos on : [Symfony documentation](https://symfony.com/doc/3.1/setup/web_se
 
 ---
 
+## Installation with Docker __(recommended)__
+### Get files
+>```
+>git clone https://github.com/LFZDavid/Todolist.git
+>```
+
+>### Install dependencies : 
+>```
+>cd Todolist/
+>docker exec -i todolist_web composer install
+>```
+
+>### Database :
+>
+>_`dev/prod :`_
+>```
+>docker exec -i todolist_web bin/console doctrine:database:drop --if-exists --force
+>docker exec -i todolist_web bin/console doctrine:database:create
+>docker exec -i todolist_web bin/console doctrine:schema:update --force
+>```
+>_`test :`_
+>```
+>docker exec -i todolist_web bin/console doctrine:database:drop --if-exists --force --env=test
+>docker exec -i todolist_web bin/console doctrine:database:create --env=test
+>docker exec -i todolist_web bin/console doctrine:schema:update --force --env=test
+>```
+
+>### Install demo data: _( `optional` )_
+>    ```
+>    docker exec -i todolist_web bin/console doctrine:fixtures:load
+>    ```
+
+---
+
+---
+
 ## Installation
 >### Get files : 
 >```
