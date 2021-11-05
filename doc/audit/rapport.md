@@ -88,14 +88,6 @@ C'est sur cette version qu'a été fait cet audit.<br>
 * Utiliser l'injection de dépendances plutôt que les containers
 * Spécification des verbes HTTP pour les routes
 
-<!-- ### Features
-### Add Author
-[Lien vers la pull request : Add - Author](https://github.com/LFZDavid/Todolist/pull/10/files)
-
-### Add Roles
-[Lien vers la pull request : Add - Roles](https://github.com/LFZDavid/Todolist/pull/11/files)
-[Lien vers la pull request : Roles access](https://github.com/LFZDavid/Todolist/pull/12/files) -->
-
 <div style="page-break-after: always;"></div>
 
 # Audit de performances
@@ -103,7 +95,7 @@ C'est sur cette version qu'a été fait cet audit.<br>
 ## __Analyse des routes__
 
 L'analyse des performances de l'application a été effectuée avec l'outils [Blackfire](https://blackfire.io/).
-Parmis les données récoltés
+Parmis les données récoltés voici un récap du temps d'éxécution _(en millisecondes)_ ainsi que la mémoire utilisée _(en mégabytes )_ pour chaques routes de l'application.
 
 |Route|Temps d'execution|Memoire utilisée _(MB)_|
 |---|---|---|
