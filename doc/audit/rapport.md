@@ -173,6 +173,8 @@ L'analyse de la couverture de tests permet de s'assurer du taux de couverture de
 [Lien vers le rapport de test coverage](https://coveralls.io/github/LFZDavid/Todolist)<br>
 _nb_: _certaine partie du code ont été volontairement exclue du coverage._ (ex: route non utilisé _login_check & logout)
 
+<div style="page-break-after: always;"></div>
+
 ## __Corrections des anomalies__
 * Boutons de navigations : 
   * fix: des liens défectueux
@@ -201,7 +203,7 @@ Le [calendrier de release Symfony](https://symfony.com/releases) indique qu'en m
 Par définition, ces versions sont celle bénéficiant de la période de maintenance la plus longue _(~3ans pour les bugs et ~3,5ans pour la sécurité)_ .
 A l'heure ou cet audit est effecuté la version LTS la plus récente est la version `4.4`.  
 
-<img src="img/symfony_releases.png" alt="symfony_releases">
+<img src="img/symfony_releases.png" alt="symfony_releases" height="50%">
 
 ### __PHP__
 L'upgrade de version Symfony permet notamment d'utiliser des versions supérieurs de PHP.<br>
@@ -209,6 +211,8 @@ Il est donc recommandé d'utiliser la version `7.4`.<br>
 Comme indiqué dans [la documentation officielle PHP](https://www.php.net/releases/7_4_0.php), le language a fait l'objet de nombreuses évolutions, ainsi que l'ajout de différentes [fonctionnalitées](https://www.php.net/manual/fr/migration74.new-features.php) _(propriétés typées, fonctions flèches, déballage dans les tableaux, etc...)_.
 
 C'est donc cette version qui été utilisé pour le profiling de la branch `develop` du projet qui contient les améliorations de l'application.<br>
+
+<div style="page-break-after: always;"></div>
 
 ### __Dépendances__
 L'utilisation de la version `4.4` de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.<br>
@@ -224,8 +228,6 @@ Voici une liste non-exaustives des packages concernés :
 >  * php-coveralls : _rapport de couverture de tests_
 ><br>
 >
-
-<div style="page-break-after: always;"></div>
 
 ### __Structure des fichiers__
 Afin de correspondre au fonctionnement de la version 4 de Symfony et en particulier `Symfony Flex`, la structure des fichiers doit être modifiée comme suis : 
@@ -250,7 +252,6 @@ dossier-principale/
 ├── var/
 └── vendor/
 ```
-
 <div style="page-break-after: always;"></div>
 
 ## __Composant de sécurité__
