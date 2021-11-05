@@ -33,7 +33,7 @@ more infos on : [Symfony documentation](https://symfony.com/doc/3.1/setup/web_se
 >cd Todolist
 >```
 >```
->cd docker-compose up -d
+>docker-compose up -d
 >```
 
 >### Install dependencies : 
