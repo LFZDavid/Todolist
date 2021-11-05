@@ -18,10 +18,15 @@ https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 >git clone https://github.com/LFZDavid/Todolist.git
 >```
 
->### Run Containers
+>### .env file
 >```
 >cd Todolist
 >```
+>```
+>cp sample.env .env
+>```
+
+>### Run Containers
 >```
 >docker-compose up -d
 >```
@@ -29,11 +34,6 @@ https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 >### Install dependencies : 
 >```
 >docker exec -i todolist_web composer install
->```
-
->### .env file
->```
->cp sample.env .env
 >```
 
 >### Install database on environments:
