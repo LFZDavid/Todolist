@@ -1,109 +1,187 @@
 # Audit de perfomance et de qualité
 
-## Sommaire
-1. Audit technique
-  * Security:Check
-  * Composer Outdated
-  * Analyse CodeClimate
-  * Review du code
-    * Assertions Entitées
-    * Contraintes dans les formulaire
-    * Commentaires
-    * Injection de dépendances
-    * Spécification des verbes HTTP pour les routes
-    * Setter manquant pour l'attribut `isDone` de Task::class
-    * Params non utilisé
+# Sommaire
+1. [Audit technique](#audit-technique)
+    * [Dette technique](#dette-technique)
+    * [Analyse automatique](#analyse-automatique)
+    * [Review manuelle](#review-manuelle)
+2. [Audit de performances](#audit-de-performances)
+    * [Analyse des routes](#analyse-des-routes)
+3. [Améliorations](#améliorations)
+    * [Dockerization](#dockerization)
+    * [Implémentation de tests automatisés](#implémentation-de-tests-automatisés)
+    * [Ajout de Fixtures pour les tests et le développement](#ajout-de-fixtures-pour-les-tests-et-le-développement)
+    * [Ajout agent test coverage](#ajout-agent-test-coverage)
+    * [Corrections des anomalies](#corrections-des-anomalies)
+    * [Upgrade](#upgrade)
+      * [Symfony](#symfony)
+      * [PHP](#php)
+      * [Dépendances](#dépendances)
+      * [Structure des fichiers](#structure-des-fichiers)
+    * [Composant de sécurité](#composant-de-sécurité)
+    * [Bonnes Pratiques](#bonnes-pratiques)
+4. [Gains de performances](#gains-de-performances)
 
-  * Tests manuels
-    * Boutons de navigation
-    * Fichiers manquant (console)
-  * Dette technique
-    * Version Symfony
-    * Version PHP
+<div style="page-break-after: always;"></div>
 
-2. Audit de performance
-  * Analyse des routes
-  * Solution Amélioration des performances
+# Audit technique
+## __Dette technique__
+### __Obsolèscence des packages__ <br>
+>La commande `composer outdated` nous permet d'afficher la liste des paquets installés ayant des mises à jour disponibles.
+>![composer outdated](img/composer_outdated.png)
+
+---
+### __Version du Framework__<br>
+>La version Symfony utilisée est la __3.1__
+![calendrier des release](img/symfony_31.png) <br>
+Comme indiqué dans la documentation cette version est obsolète. <br>
+>_source : [calendrier de release Symfony](https://symfony.com/releases)_
+
+---
+### __Version php__<br>
+>La version haute utilisable est la 7.1.33
+<img src="img/php_version.png" style="margin-top:-200px;">
+>_source : [doc officielle php](https://www.php.net/eol.php)_
+
+---
+## Analyse automatique
+>L'analyse de qualité du code faite grace à l'outils [CodeClimate](https://codeclimate.com/) n'a révélé que quelques anomalies non critiques, qui pourront être corrigées facilement.<br>
+>![issue CodeClimate](img/Codeclimate/Unused_parameters.png) 
+
+---
+## Review manuelle
+### Anomalies
+>* Le bouton "Consulter la liste des tâches à faire" renvoie vers la liste de __toutes__ les taches.
+>
+>* Le bouton "Consulter la liste des taches terminées" ne renvoie nulle part.
+>
+>* Setter manquant pour l'attribut `isDone` de Task::class
+>
+>* Fichiers manquant (bootstrap/jquery)
+>  Une erreur dans la console signalait des fichiers manquants
+>   `web/js/jquery.js`<br>
+>   `web/css/bootstrap.min.css.map`
+
+---
+### Points améliorables
+>* Ajouter des contraintes de validation sur les entitées et ou les formulaires _( [voir doc Validation](https://symfony.com/doc/current/validation.html) )_
+>* Personnalisation des pages d'erreurs _(500, 404, etc...)_ 
+>* Utiliser l'injection de dépendances plutôt que les containers
+>* Spécification des verbes HTTP pour les routes
 
 
-#### Version php (<= 7.1.33)
-#### Version framework (3.1)
-
-### Améliorations
-#### __Dockerize__
-[Lien vers la pull request : Dockerize](https://github.com/LFZDavid/Todolist/pull/2/files)
-modules php (xdebug, opcache)
-#### Tests
-Ajout de tests fonctionnels
-[Lien vers la pull request : Test Legacy](https://github.com/LFZDavid/Todolist/pull/4/files)
-#### Fixtures
-Ajout de fixtures
-[Lien vers la pull request : Fixtures](https://github.com/LFZDavid/Todolist/pull/6/files)
-
-##### Mise en place d'un outils d'intégration continue
-  * Installation de Travis
-  * CodeClimate
-  * PhpUnit
-  * CoverAlls
-
-##### Ajout agent test coverage
-nb : certaine partie du code ont été volontairement exclue du coverage. (ex: route non utilisé _login_check & logout)
-
-
-### Features
-#### Add Author
+<!-- ### Features
+### Add Author
 [Lien vers la pull request : Add - Author](https://github.com/LFZDavid/Todolist/pull/10/files)
 
-#### Add Roles
+### Add Roles
 [Lien vers la pull request : Add - Roles](https://github.com/LFZDavid/Todolist/pull/11/files)
-[Lien vers la pull request : Roles access](https://github.com/LFZDavid/Todolist/pull/12/files)
+[Lien vers la pull request : Roles access](https://github.com/LFZDavid/Todolist/pull/12/files) -->
 
-### Anomalies & Bonnes pratiques
+<div style="page-break-after: always;"></div>
 
-#### __Boutons de navigations__ :
- ##### _Observation_ : 
-  * Le bouton "Consulter la liste des tâches à faire" renvoie vers la liste de __toutes__ les taches.
-  * Le bouton "Consulter la liste des taches terminées" ne renvoie nulle part.
- ##### _Amélioration_ :
-  >Affectation des routes sur le template `app/Resources/views/default/index.html.twig`
-  >![app/Resources/views/default/index.html.twig](img/fix_routes_template.png)
-  
-  > Création des methodes dans le controller `src/AppBundle/Controller/TaskController.php`
-  >![app/Resources/views/default/index.html.twig](img/fix_routes_controller.png)
+# Audit de performances
+## __Analyse des routes__
 
- #### __Fichiers manquant (bootstrap/jquery)__
- ##### _Observation_ :
-  Une erreur dans la console signalait des fichiers manquants
- ##### _Amélioration_ :
-  Ajout des fichiers manquant pour les librairies :
-  * `web/css/bootstrap.min.css.map`
-  * `web/js/jquery.js`
+### __Home__
+>Page d'accueil
+><img src="img/bf_main/homepage.png">
 
-#### Setter manquant pour l'attribut `isDone` de Task::class
+### __Login__
+>Formulaire de login _( affichage )_
+><img src="img/bf_main/login_form.png">
+>Formulaire de login _( traitement )_
+><img src="img/bf_main/login_submit.png" style="margin-top: -180px">
+>Déconexion
+><img src="img/bf_main/logout.png">
+
+### __Users__
+>Formulaire de création d'un utilisateur _( affichage )_
+><img src="img/bf_main/user_create_form.png"  style="margin-top: -115px">
+>Formulaire de création d'un utilisateur _( soumission )_
+><img src="img/bf_main/user_create_submit.png">
+>Formulaire d'édition d'un utilisateur _( affichage )_
+><img src="img/bf_main/user_edit_form.png" style="margin-top: -150px">
+>Formulaire d'édition d'un utilisateur _( soumission )_
+><img src="img/bf_main/user_edit_submit.png">
+
+### __Taches___
+>Liste des tâches
+><img src="img/bf_main/task_list.png">
+>Liste des tâches à faire
+><img src="img/bf_main/task_todo.png">
+>Liste des tâches terminées
+><img src="img/bf_main/tasks_done.png">
+>Formulaire de création de tâche _( affichage )_
+><img src="img/bf_main/task_create_form.png">
+>Formulaire de création de tâche _( soumission )_
+><img src="img/bf_main/task_create_submit.png">
+>Suppression d'une tâche
+><img src="img/bf_main/task_delete.png">
+>Formulaire d'édition de tâche _( affichage )_
+><img src="img/bf_main/task_edit_form.png" style="margin-bottom: -210px">
+>Formulaire d'édition de tâche _( soumission )_
+><img src="img/bf_main/task_edit_submit.png">
+>Changement de status d'une tâche _( toggle )_
+><img src="img/bf_main/task_toggle.png">
+
+<div style="page-break-after: always;"></div>
+
+# Améliorations
+## __Dockerization__
+[Lien vers la pull request : Dockerize](https://github.com/LFZDavid/Todolist/pull/2/files)
+modules php (xdebug, opcache)
+
+---
+## __Implémentation de tests automatisés__
+[Lien vers la pull request : Test Legacy](https://github.com/LFZDavid/Todolist/pull/4/files)
+
+---
+## __Ajout de Fixtures pour les tests et le développement__
+[Lien vers la pull request : Fixtures](https://github.com/LFZDavid/Todolist/pull/6/files)
+
+---
+## __Ajout agent test coverage__
+[Lien vers le rapport de test coverage](https://coveralls.io/github/LFZDavid/Todolist)<br>
+_nb : certaine partie du code ont été volontairement exclue du coverage. (ex: route non utilisé _login_check & logout)_
+
+---
+## Corrections des anomalies
+
+### __Boutons de navigations__ :
+>Affectation des routes sur le template `app/Resources/views/default/index.html.twig`
+>![app/Resources/views/default/index.html.twig](img/fix_routes_template.png)
+> Création des methodes dans le controller `src/AppBundle/Controller/TaskController.php`
+>![app/Resources/views/default/index.html.twig](img/fix_routes_controller.png)
+
+### __Ajout du setter manquant dans la classe Task__
 >![fix_add_setIsDone](img/fix_add_setIsDone.png)
 
-#### Paramètre non utilisé
-La methode `loginAction` de la classe `SecurityController` requière en argument `$request` ( instance de la classe `Request` ) or celui-ci n'est pas utilisé dans la methode. Il est donc préférable de le retirer.
+---
+## __Upgrade__
+### __Symfony__ 
+> Migration vers la dernière version LTS de symfony (`4.4`).<br><br>
 
-##### Symfony
-Migration vers la dernière version LTS de symfony (`4.4`).
-##### PHP
-L'upgrade de version Symfony permet notamment d'utiliser des versions supérieurs de PHP (>=7.1.3). Il est donc recommandé d'utiliser la version `7.4` voir même la version `8` qui est également supportée.
-##### Dépendances
-L'utilisation d'une version supérieur de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.
-Voici une liste non-exaustives des packages concernés : 
-* sensio/framework-extra-bundle : mise à jour de la version `3.0` vers `5.1`
-* phpunit/phpunit : mise à jour de la version `5.0` vers `9.5`
-* nelmio/alice : mise à jour de la version `2.1` vers `3.0`
-* symfony/profiler : mise à jour de la version `1.0` vers `4.4`
-* symfony/security : composant de sécurité
-* symfony/validator : validation de création/édition d'entité
-* symfony/dotenv : gestion de variables d'environement
-* symfony/form : gestion de variables d'environement
-* php-coveralls : rapport de couverture de tests
+### __PHP__
+>L'upgrade de version Symfony permet notamment d'utiliser des versions supérieurs de PHP (>=7.1.3). Il est donc recommandé d'utiliser la version `7.4` voir même la version `8` qui est également supportée.<br><br>
 
-##### Mise à jour de la structure des fichiers
-Afin de correspondre au fonctionnement de la version 4 de Symfony et en particulier `Symfony Flex`, la structure des fichiers doit être modifiée comme suis : 
+### __Dépendances__
+>L'utilisation d'une version supérieur de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.<br>
+>Voici une liste non-exaustives des packages concernés : 
+>  * sensio/framework-extra-bundle : `3.0` => `5.1`
+>  * phpunit/phpunit : `5.0` => `9.5`
+>  * nelmio/alice : `2.1` => `3.0`
+>  * symfony/profiler : `1.0` => `4.4`
+>  * symfony/security : _composant de sécurité_
+>  * symfony/validator : _validation de création/édition d'entité_
+>  * symfony/dotenv : _gestion de variables d'environement_
+>  * symfony/form : _gestion de variables d'environement_
+>  * php-coveralls : _rapport de couverture de tests_
+><br>
+>
+
+### __Structure des fichiers__
+>Afin de correspondre au fonctionnement de la version 4 de Symfony et en particulier `Symfony Flex`, la structure des fichiers doit être modifiée comme suis : 
 ```
 dossier-principale/
 ├── assets/
@@ -125,20 +203,81 @@ dossier-principale/
 ├── var/
 └── vendor/
 ```
-#### Bonnes pratiques
+## __Composant de sécurité__
+>L'installation du package de sécurité permet une gestion simplifiée des accès au différentes parties de l'application.<br>
+>[_plus d'information sur le composant de sécurité_](../AUTHENTICATION.md)
+
+## __Bonnes pratiques__
 * Création de class Repositories récupéré par injections de dépendances
 * Utiliser la classe EntityManager au lieu de ObjectManager
 * Utilisation de Listener pour l'encodage du mot de passe utilisateur
 * Suppression du suffix "Action" dans les noms de methods des controller
 * Utilisation de Voter pour la gestion des `Task`
-* Ajout de page d'erreurs personnalisée
 
-#### Composant de sécurité
-L'installation du package de sécurité permet une gestion simplifiée des accès au différentes parties de l'application.
+## __Suggestion d'améliorations__
+* Mise en place d'un cache
+* Pagination
+* Affichage des taches créées par utilisateur
 
-##### Mise en place d'un cache
-##### unicité task::title
-##### minLength Entities::attr
-##### Mise en place d'un cache
-##### Pagination
-##### Affichage des taches créées par utilisateur
+<div style="page-break-after: always;"></div>
+
+# Gains de performances
+
+### __Home__
+>Page d'accueil
+><img src="img/bf_develop/homepage.png">
+><img src="img/bf_compare/homepage.png">
+
+### __Login__
+>Formulaire de login _( affichage )_
+><img src="img/bf_develop/login_form.png" style="margin-bottom: -100px">
+><img src="img/bf_compare/login_form.png">
+>Formulaire de login _( traitement )_
+><img src="img/bf_develop/login_submit.png">
+><img src="img/bf_compare/login_submit.png">
+>Déconexion
+><img src="img/bf_develop/logout.png" style="margin-bottom: -170px">
+><img src="img/bf_compare/logout.png">
+
+### __Users__
+>Formulaire de création d'un utilisateur _( affichage )_
+><img src="img/bf_develop/user_create_form.png">
+><img src="img/bf_compare/user_create_form.png">
+>Formulaire de création d'un utilisateur _( soumission )_
+><img src="img/bf_develop/user_create_submit.png">
+><img src="img/bf_compare/user_create_submit.png">
+>Formulaire d'édition d'un utilisateur _( affichage )_
+><img src="img/bf_develop/user_edit_form.png" style="margin-bottom: -220px">
+><img src="img/bf_compare/user_edit_form.png">
+>Formulaire d'édition d'un utilisateur _( soumission )_
+><img src="img/bf_develop/user_edit_submit.png" style="margin-bottom: -220px">
+><img src="img/bf_compare/user_edit_submit.png">
+
+### __Taches___
+>Liste des tâches
+><img src="img/bf_develop/task_list.png">
+><img src="img/bf_compare/task_list.png">
+>Liste des tâches à faire
+><img src="img/bf_develop/tasks_todo.png">
+><img src="img/bf_compare/tasks_todo.png">
+>Liste des tâches terminées
+><img src="img/bf_develop/tasks_done.png">
+><img src="img/bf_compare/tasks_done.png">
+>Formulaire de création de tâche _( affichage )_
+><img src="img/bf_develop/task_create_form.png">
+><img src="img/bf_compare/task_create_form.png">
+>Formulaire de création de tâche _( soumission )_
+><img src="img/bf_develop/task_create_submit.png" style="margin-bottom: -200px">
+><img src="img/bf_compare/task_create_submit.png">
+>Suppression d'une tâche
+><img src="img/bf_develop/task_delete.png">
+><img src="img/bf_compare/task_delete.png">
+>Formulaire d'édition de tâche _( affichage )_
+><img src="img/bf_develop/task_edit_form.png" style="margin-bottom: -220px">
+><img src="img/bf_compare/task_edit_form.png">
+>Formulaire d'édition de tâche _( soumission )_
+><img src="img/bf_develop/task_edit_submit.png" style="margin-bottom: -80px">
+><img src="img/bf_compare/task_edit_submit.png">
+>Changement de status d'une tâche _( toggle )_
+><img src="img/bf_develop/task_toggle.png">
+><img src="img/bf_compare/task_toggle.png">
