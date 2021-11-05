@@ -342,7 +342,12 @@ En comparant les performance de la branche principale avec la branche `develop` 
 
 # __Suggestion d'améliorations__
 ---
-* Mise en place d'un cache
-* Pagination
-* Affichage des taches créées par utilisateur
-* Migration vers php 8
+### Cache
+  La mise en place de mise en cache sur certaines pages permettrait de réduire d'avantage le chargement.
+### Pagination
+  Dans l'hypothèse ou le nombre de taches et d'utilisateurs atteindrait un nombre important un syteme de pagination permettrait d'améliorer le confort de navigation et également de limiter le chargement d'éléments sur les pages destinées à afficher une liste de ces entités.
+### Navigation a facettes
+  La navigation a facettes permettrait de filter l'affichage des taches de manière intuitive (ex: période de création, autheur, etc...).
+
+### Migration version php 8
+  La version 8 de PHP est relativement récente à l'heure actuelle mais il serait très probablement bénéfique, à terme, de migrer vers cette version afin de bénéficier de nouvelles fonctionnalitées et évolutions liées au languages (ex : Attributs, Types d'union, etc... ).
