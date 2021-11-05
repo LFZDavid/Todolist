@@ -102,47 +102,37 @@ C'est sur cette version qu'a été fait cet audit.<br>
 ---
 ## __Analyse des routes__
 
-### __Home__
->Page d'accueil<br>
-><img src="img/bf_main/homepage.png"><br>
+L'analyse des performances de l'application a été effectuée avec l'outils [Blackfire](https://blackfire.io/).
+Parmis les données récoltés
 
-### __Login__
->Formulaire de login _( affichage )_<br>
-><img src="img/bf_main/login_form.png"><br>
->Formulaire de login _( traitement )_<br>
-><img src="img/bf_main/login_submit.png" style="margin-top: -180px"><br>
->Déconexion<br>
-><img src="img/bf_main/logout.png"><br>
-
-### __Users__
->Formulaire de création d'un utilisateur _( affichage )_<br>
-><img src="img/bf_main/user_create_form.png"  style="margin-top: -140px"><br>
->Formulaire de création d'un utilisateur _( soumission )_<br>
-><img src="img/bf_main/user_create_submit.png"><br>
->Formulaire d'édition d'un utilisateur _( affichage )_<br>
-><img src="img/bf_main/user_edit_form.png" style="margin-top: -200px"><br>
->Formulaire d'édition d'un utilisateur _( soumission )_<br>
-><img src="img/bf_main/user_edit_submit.png"><br>
-
-### __Taches___
->Liste des tâches<br>
-><img src="img/bf_main/task_list.png"><br>
->Liste des tâches à faire<br>
-><img src="img/bf_main/task_todo.png"><br>
->Liste des tâches terminées<br>
-><img src="img/bf_main/tasks_done.png"><br>
->Formulaire de création de tâche _( affichage )_<br>
-><img src="img/bf_main/task_create_form.png"><br>
->Formulaire de création de tâche _( soumission )_<br>
-><img src="img/bf_main/task_create_submit.png"><br>
->Suppression d'une tâche<br>
-><img src="img/bf_main/task_delete.png"><br>
->Formulaire d'édition de tâche _( affichage )_<br>
-><img src="img/bf_main/task_edit_form.png" style="margin-bottom: -210px"><br>
->Formulaire d'édition de tâche _( soumission )_<br>
-><img src="img/bf_main/task_edit_submit.png"><br>
->Changement de status d'une tâche _( toggle )_<br>
-><img src="img/bf_main/task_toggle.png"><br>
+|Route|Temps d'execution|Memoire utilisée _(MB)_|
+|---|---|---|
+|__Home__|
+|Page d'accueil|86.8 _ms_|13.5 _MB_|
+||
+|__Login__|
+|Login _( formulaire )_|66.2 _ms_|11.2 _MB_|
+|Login _( process )_|66.2 _ms_|13.3 _MB_|
+|Déconexion|79.2 _ms_|13.3 _MB_|
+||
+|__Users__|
+|Création d'un utilisateur _( formulaire )_|95 _ms_|14.1 _MB_|
+|Création d'un utilisateur _( process )_|455 _ms_|16.7 _MB_|
+|Edition d'un utilisateur _( formulaire )_|118 _ms_|17 _MB_|
+|Edition d'un utilisateur _( process )_|448 _ms_|16.9 _MB_|
+||
+|__Users__|
+|Liste des tâches _(toutes)_|86.1 _ms_|13.6 _MB_|
+|Liste des tâches _(a faire)_|87.3 _ms_|13.6 _MB_|
+|Liste des tâches _(terminées)_|86.1 _ms_|13.6 _MB_|
+||
+|__Tasks__|
+|Création d'une tâche _( formulaire )_|107 _ms_|16.4 _MB_|
+|Création d'une tâche _( process )_|112 _ms_|16.3 _MB_|
+|Edition d'une tâche _( formulaire )_|109 _ms_|16.5 _MB_|
+|Edition d'une tâche _( process )_|120 _ms_|16.3 _MB_|
+|Changement de status d'une tâche _( toggle )_|90.9 _ms_|13.8 _MB_|
+|Suppression d'une tâche|87.7 _ms_|13.8 _MB_|
 
 <div style="page-break-after: always;"></div>
 
@@ -183,15 +173,6 @@ _nb_: _certaine partie du code ont été volontairement exclue du coverage._ (ex
 * Ajout des fichiers manquant :
  * `web/js/jquery.js`
  * `web/css/bootstrap.min.css.map`
-
-<!-- ### __Boutons de navigations__ : -->
-<!-- >Affectation des routes sur le template `app/Resources/views/default/index.html.twig`<br>
-><img src="img/fix_routes_template.png" alt="app/Resources/views/default/index.html.twig"><br>
-> Création des methodes dans le controller `src/AppBundle/Controller/TaskController.php`<br>
-> <img src="img/fix_routes_controller.png" alt="app/Ressources/views/default/index.html.twig"><br> -->
-
-<!-- ### __Ajout du setter manquant dans la classe Task__ -->
-<!-- ><img src="img/fix_add_setIsDone.png" alt="fix_add_setIsDone"><br> -->
 
 <div style="page-break-after: always;"></div>
 
@@ -275,68 +256,34 @@ En comparant les performance de la branche principale avec la branche `develop` 
 |Gain moyen|%|
 |---|---|
 |Temps d'execution | 65,6%|
-|Utilisation processeur | 65,7%:|
-|Utilisation mémoire | 75,5%:|
+|Utilisation mémoire | 75,5%|
 
-
-### __Home__
->Page d'accueil<br>
-><img src="img/bf_develop/homepage.png"><br>
-><img src="img/bf_compare/homepage.png"><br>
-
-### __Login__
->Formulaire de login _( affichage )_<br>
-><img src="img/bf_develop/login_form.png" style="margin-bottom: -100px"><br>
-><img src="img/bf_compare/login_form.png"><br>
->Formulaire de login _( traitement )_<br>
-><img src="img/bf_develop/login_submit.png"><br>
-><img src="img/bf_compare/login_submit.png"><br>
->Déconexion<br>
-><img src="img/bf_develop/logout.png" style="margin-bottom: -210px"><br>
-><img src="img/bf_compare/logout.png"><br>
-
-### __Users__
->Formulaire de création d'un utilisateur _( affichage )_<br>
-><img src="img/bf_develop/user_create_form.png"><br>
-><img src="img/bf_compare/user_create_form.png"><br>
->Formulaire de création d'un utilisateur _( soumission )_<br>
-><img src="img/bf_develop/user_create_submit.png"><br>
-><img src="img/bf_compare/user_create_submit.png"><br>
->Formulaire d'édition d'un utilisateur _( affichage )_<br>
-><img src="img/bf_develop/user_edit_form.png" style="margin-bottom: -250px"><br>
-><img src="img/bf_compare/user_edit_form.png"><br>
->Formulaire d'édition d'un utilisateur _( soumission )_<br>
-><img src="img/bf_develop/user_edit_submit.png" style="margin-bottom: -250px"><br>
-><img src="img/bf_compare/user_edit_submit.png"><br>
-
-### __Taches___
->Liste des tâches<br>
-><img src="img/bf_develop/task_list.png"><br>
-><img src="img/bf_compare/task_list.png"><br>
->Liste des tâches à faire<br>
-><img src="img/bf_develop/tasks_todo.png"><br>
-><img src="img/bf_compare/tasks_todo.png"><br>
->Liste des tâches terminées<br>
-><img src="img/bf_develop/tasks_done.png"><br>
-><img src="img/bf_compare/tasks_done.png"><br>
->Formulaire de création de tâche _( affichage )_<br>
-><img src="img/bf_develop/task_create_form.png"><br>
-><img src="img/bf_compare/task_create_form.png"><br>
->Formulaire de création de tâche _( soumission )_<br>
-><img src="img/bf_develop/task_create_submit.png" style="margin-bottom: -220px"><br>
-><img src="img/bf_compare/task_create_submit.png"><br>
->Suppression d'une tâche<br>
-><img src="img/bf_develop/task_delete.png"><br>
-><img src="img/bf_compare/task_delete.png"><br>
->Formulaire d'édition de tâche _( affichage )_<br>
-><img src="img/bf_develop/task_edit_form.png" style="margin-bottom: -250px"><br>
-><img src="img/bf_compare/task_edit_form.png"><br>
->Formulaire d'édition de tâche _( soumission )_<br>
-><img src="img/bf_develop/task_edit_submit.png" style="margin-bottom: -80px"><br>
-><img src="img/bf_compare/task_edit_submit.png"><br>
->Changement de status d'une tâche _( toggle )_<br>
-><img src="img/bf_develop/task_toggle.png"><br>
-><img src="img/bf_compare/task_toggle.png"><br>
+|Route|Temps d'execution|Memoire utilisée _(MB)_|
+|---|---|---|
+|__Home__|
+|Page d'accueil|28 _ms_ __(-68%)__|2.99 _MB_ __(-78%)__|
+||
+|__Login__|
+|Login _( formulaire )_|18 _ms_ __(-76%)__|2.64 _MB_ __(-73%)__|
+|Login _( process )_|125 _ms_ __(-78%)__|2.99 _MB_ __(-70%)__|
+|Déconexion|26.5 _ms_ __(-78%)__|2.88 _MB_ __(-66%)__|
+||
+|__Users__|
+|Création d'un utilisateur _( formulaire )_|43.3 _ms_ __(-70%)__|4.27 _MB_ __(-54%)__|
+|Création d'un utilisateur _( process )_|157 _ms_ __(-73%)__|4.43 _MB_ __(-65%)__|
+|Edition d'un utilisateur _( formulaire )_|44.4 _ms_ __(-74%)__|4.38 _MB_ __(-62%)__|
+|Edition d'un utilisateur _( process )_|53.3 _ms_ __(-74%)__|4.46 _MB_ __(-88%)__|
+||
+|__Tasks__|
+|Liste des tâches _(toutes)_|30.7 _ms_ __(-77%)__|3.11 _MB_ __(-67%)__|
+|Liste des tâches _(a faire)_|30.6 _ms_ __(-77%)__|3.13 _MB_ __(-65%)__|
+|Liste des tâches _(terminées)_|31.3 _ms_ __(-77%)__|3.13 _MB_ __(-64%)__|
+|Création d'une tâche _( formulaire )_|38.6 _ms_ __(-75%)__|4.03 _MB_ __(-64%)__|
+|Création d'une tâche _( process )_|44 _ms_ __(-75%)__|4.14 _MB_ __(-61%)__|
+|Edition d'une tâche _( formulaire )_|40 _ms_ __(-75%)__|4.04 _MB_ __(-63%)__|
+|Edition d'une tâche _( process )_|43.5 _ms_ __(-75%)__|4.13 _MB_ __(-64%)__|
+|Changement de status d'une tâche _( toggle )_|35.6 _ms_ __(-76%)__ |3.29 _MB_ __(-61%)__|
+|Suppression d'une tâche|35.3 _ms_ __(-76%)__|3.38 _MB_ __(-60%)__|
 
 <div style="page-break-after: always;"></div>
 
