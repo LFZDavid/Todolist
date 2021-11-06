@@ -97,32 +97,38 @@ C'est sur cette version qu'a été fait cet audit.<br>
 L'analyse des performances de l'application a été effectuée avec l'outil [Blackfire](https://blackfire.io/).
 Parmis les données récoltées voici un récap du temps d'éxécution _(en millisecondes)_ ainsi que la mémoire utilisée _(en mégabytes )_ pour chaques routes de l'application.
 
-|Route|Temps d'éxécution|Memoire utilisée _(MB)_|
-|---|---|---|
-|__Home__|
-|Page d'accueil|86.8 _ms_|13.5 _MB_|
-||
-|__Login__|
-|Login _( formulaire )_|66.2 _ms_|11.2 _MB_|
-|Login _( process )_|66.2 _ms_|13.3 _MB_|
-|Déconnexion|79.2 _ms_|13.3 _MB_|
-||
-|__Users__|
-|Création d'un utilisateur _( formulaire )_|95 _ms_|14.1 _MB_|
-|Création d'un utilisateur _( process )_|455 _ms_|16.7 _MB_|
-|Edition d'un utilisateur _( formulaire )_|118 _ms_|17 _MB_|
-|Edition d'un utilisateur _( process )_|448 _ms_|16.9 _MB_|
-||
-|__Tasks__|
-|Liste des tâches _(toutes)_|86.1 _ms_|13.6 _MB_|
-|Liste des tâches _(à faire)_|87.3 _ms_|13.6 _MB_|
-|Liste des tâches _(terminées)_|86.1 _ms_|13.6 _MB_|
-|Création d'une tâche _( formulaire )_|107 _ms_|16.4 _MB_|
-|Création d'une tâche _( process )_|112 _ms_|16.3 _MB_|
-|Edition d'une tâche _( formulaire )_|109 _ms_|16.5 _MB_|
-|Edition d'une tâche _( process )_|120 _ms_|16.3 _MB_|
-|Changement de statut d'une tâche _( toggle )_|90.9 _ms_|13.8 _MB_|
-|Suppression d'une tâche|87.7 _ms_|13.8 _MB_|
+| Route                                         | Temps d'éxécution | Memoire utilisée _(MB)_ |
+| --------------------------------------------- | ----------------- | ----------------------- |
+| __Home__                                      |
+| Page d'accueil                                | 86.8 _ms_         | 13.5 _MB_               |
+|                                               |
+| __Login__                                     |
+| Login _( formulaire )_                        | 66.2 _ms_         | 11.2 _MB_               |
+| Login _( process )_                           | 66.2 _ms_         | 13.3 _MB_               |
+| Déconnexion                                   | 79.2 _ms_         | 13.3 _MB_               |
+|                                               |
+| __Users__                                     |
+| Création d'un utilisateur _( formulaire )_    | 95 _ms_           | 14.1 _MB_               |
+| Création d'un utilisateur _( process )_       | 455 _ms_          | 16.7 _MB_               |
+| Edition d'un utilisateur _( formulaire )_     | 118 _ms_          | 17 _MB_                 |
+| Edition d'un utilisateur _( process )_        | 448 _ms_          | 16.9 _MB_               |
+|                                               |
+| __Tasks__                                     |
+| Liste des tâches _(toutes)_                   | 86.1 _ms_         | 13.6 _MB_               |
+| Liste des tâches _(à faire)_                  | 87.3 _ms_         | 13.6 _MB_               |
+| Liste des tâches _(terminées)_                | 86.1 _ms_         | 13.6 _MB_               |
+| Création d'une tâche _( formulaire )_         | 107 _ms_          | 16.4 _MB_               |
+| Création d'une tâche _( process )_            | 112 _ms_          | 16.3 _MB_               |
+| Edition d'une tâche _( formulaire )_          | 109 _ms_          | 16.5 _MB_               |
+| Edition d'une tâche _( process )_             | 120 _ms_          | 16.3 _MB_               |
+| Changement de statut d'une tâche _( toggle )_ | 90.9 _ms_         | 13.8 _MB_               |
+| Suppression d'une tâche                       | 87.7 _ms_         | 13.8 _MB_               |
+
+<div style="page-break-after: always;"></div>
+
+## __Analyse des métrics__
+
+On constate que les actions utilisateurs prennent plus de temps que l'affichage seul. En effet, ces actions font appel à d'avantage d'éléments de l'applications, notamment les interactions avec la base de données. Ces processus peuvent être un peu longs mais il est tout à fait possible de les réduire avec les améliorations décritent ci-dessous.
 
 <div style="page-break-after: always;"></div>
 
@@ -185,7 +191,7 @@ C'est donc cette version qui été utilisé pour le profiling de la branch `deve
 <div style="page-break-after: always;"></div>
 
 ### __Dépendances__
-L'utilisation de la version `4.4` de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.<br>
+L'utilisation de Composer et de la version `7.4` de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.<br>
 Voici une liste non-éxaustives des packages concernés : 
 >  * sensio/framework-extra-bundle : `3.0` => `5.1`
 >  * phpunit/phpunit : `5.0` => `9.5`
@@ -242,37 +248,37 @@ _plus d'informations sur le composant de sécurité_ _[ici](../AUTHENTICATION.md
 ---
 En comparant les performances de la branche principale avec la branche `develop` qui contient toutes les améliorations présentées ci-dessus, on constate une nette amélioration des performances. 
 
-|Gain moyen|%|
-|---|---|
-|Temps d'éxecution | 65,6%|
-|Utilisation mémoire | 75,5%|
+| Gain moyen          | %     |
+| ------------------- | ----- |
+| Temps d'éxecution   | 65,6% |
+| Utilisation mémoire | 75,5% |
 
-|Route|Temps d'éxecution|Mémoire utilisée _(MB)_|
-|---|---|---|
-|__Home__|
-|Page d'accueil|28 _ms_ __(-68%)__|2.99 _MB_ __(-78%)__|
-||
-|__Login__|
-|Login _( formulaire )_|18 _ms_ __(-76%)__|2.64 _MB_ __(-73%)__|
-|Login _( process )_|125 _ms_ __(-78%)__|2.99 _MB_ __(-70%)__|
-|Déconnexion|26.5 _ms_ __(-78%)__|2.88 _MB_ __(-66%)__|
-||
-|__Users__|
-|Création d'un utilisateur _( formulaire )_|43.3 _ms_ __(-70%)__|4.27 _MB_ __(-54%)__|
-|Création d'un utilisateur _( process )_|157 _ms_ __(-73%)__|4.43 _MB_ __(-65%)__|
-|Edition d'un utilisateur _( formulaire )_|44.4 _ms_ __(-74%)__|4.38 _MB_ __(-62%)__|
-|Edition d'un utilisateur _( process )_|53.3 _ms_ __(-74%)__|4.46 _MB_ __(-88%)__|
-||
-|__Tasks__|
-|Liste des tâches _(toutes)_|30.7 _ms_ __(-77%)__|3.11 _MB_ __(-67%)__|
-|Liste des tâches _(à faire)_|30.6 _ms_ __(-77%)__|3.13 _MB_ __(-65%)__|
-|Liste des tâches _(terminées)_|31.3 _ms_ __(-77%)__|3.13 _MB_ __(-64%)__|
-|Création d'une tâche _( formulaire )_|38.6 _ms_ __(-75%)__|4.03 _MB_ __(-64%)__|
-|Création d'une tâche _( process )_|44 _ms_ __(-75%)__|4.14 _MB_ __(-61%)__|
-|Edition d'une tâche _( formulaire )_|40 _ms_ __(-75%)__|4.04 _MB_ __(-63%)__|
-|Edition d'une tâche _( process )_|43.5 _ms_ __(-75%)__|4.13 _MB_ __(-64%)__|
-|Changement de statut d'une tâche _( toggle )_|35.6 _ms_ __(-76%)__ |3.29 _MB_ __(-61%)__|
-|Suppression d'une tâche|35.3 _ms_ __(-76%)__|3.38 _MB_ __(-60%)__|
+| Route                                         | Temps d'éxecution    | Mémoire utilisée _(MB)_ |
+| --------------------------------------------- | -------------------- | ----------------------- |
+| __Home__                                      |
+| Page d'accueil                                | 28 _ms_ __(-68%)__   | 2.99 _MB_ __(-78%)__    |
+|                                               |
+| __Login__                                     |
+| Login _( formulaire )_                        | 18 _ms_ __(-76%)__   | 2.64 _MB_ __(-73%)__    |
+| Login _( process )_                           | 125 _ms_ __(-78%)__  | 2.99 _MB_ __(-70%)__    |
+| Déconnexion                                   | 26.5 _ms_ __(-78%)__ | 2.88 _MB_ __(-66%)__    |
+|                                               |
+| __Users__                                     |
+| Création d'un utilisateur _( formulaire )_    | 43.3 _ms_ __(-70%)__ | 4.27 _MB_ __(-54%)__    |
+| Création d'un utilisateur _( process )_       | 157 _ms_ __(-73%)__  | 4.43 _MB_ __(-65%)__    |
+| Edition d'un utilisateur _( formulaire )_     | 44.4 _ms_ __(-74%)__ | 4.38 _MB_ __(-62%)__    |
+| Edition d'un utilisateur _( process )_        | 53.3 _ms_ __(-74%)__ | 4.46 _MB_ __(-88%)__    |
+|                                               |
+| __Tasks__                                     |
+| Liste des tâches _(toutes)_                   | 30.7 _ms_ __(-77%)__ | 3.11 _MB_ __(-67%)__    |
+| Liste des tâches _(à faire)_                  | 30.6 _ms_ __(-77%)__ | 3.13 _MB_ __(-65%)__    |
+| Liste des tâches _(terminées)_                | 31.3 _ms_ __(-77%)__ | 3.13 _MB_ __(-64%)__    |
+| Création d'une tâche _( formulaire )_         | 38.6 _ms_ __(-75%)__ | 4.03 _MB_ __(-64%)__    |
+| Création d'une tâche _( process )_            | 44 _ms_ __(-75%)__   | 4.14 _MB_ __(-61%)__    |
+| Edition d'une tâche _( formulaire )_          | 40 _ms_ __(-75%)__   | 4.04 _MB_ __(-63%)__    |
+| Edition d'une tâche _( process )_             | 43.5 _ms_ __(-75%)__ | 4.13 _MB_ __(-64%)__    |
+| Changement de statut d'une tâche _( toggle )_ | 35.6 _ms_ __(-76%)__ | 3.29 _MB_ __(-61%)__    |
+| Suppression d'une tâche                       | 35.3 _ms_ __(-76%)__ | 3.38 _MB_ __(-60%)__    |
 
 <div style="page-break-after: always;"></div>
 
