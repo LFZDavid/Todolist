@@ -63,7 +63,7 @@ C'est sur cette version qu'a été fait cet audit.<br>
 <div style="page-break-after: always;"></div>
 
 ## Analyse automatique
->L'analyse de qualité du code faite grace à l'outils [CodeClimate](https://codeclimate.com/) n'a révélé que quelques anomalies non critiques, qui pourront être corrigées facilement.<br>
+>L'analyse de qualité du code faite grace à l'outil [CodeClimate](https://codeclimate.com/) n'a révélé que quelques anomalies non critiques, qui pourront être corrigées facilement.<br>
 ><img src="img/Codeclimate/Unused_parameters.png" alt="issue CodeClimate"><br>
 
 ---
@@ -82,7 +82,7 @@ C'est sur cette version qu'a été fait cet audit.<br>
 
 
 ### Points améliorables
-* Ajouter des contraintes de validation sur les entitées et ou les formulaires _( [voir doc Validation](https://symfony.com/doc/current/validation.html) )_
+* Ajouter des contraintes de validation sur les entitées et les formulaires _( [voir doc Validation](https://symfony.com/doc/current/validation.html) )_
 
 * Personnalisation des pages d'erreurs _(500, 404, etc...)_ 
 * Utiliser l'injection de dépendances plutôt que les containers
@@ -94,10 +94,10 @@ C'est sur cette version qu'a été fait cet audit.<br>
 ---
 ## __Analyse des routes__
 
-L'analyse des performances de l'application a été effectuée avec l'outils [Blackfire](https://blackfire.io/).
-Parmis les données récoltés voici un récap du temps d'éxécution _(en millisecondes)_ ainsi que la mémoire utilisée _(en mégabytes )_ pour chaques routes de l'application.
+L'analyse des performances de l'application a été effectuée avec l'outil [Blackfire](https://blackfire.io/).
+Parmis les données récoltées voici un récap du temps d'éxécution _(en millisecondes)_ ainsi que la mémoire utilisée _(en mégabytes )_ pour chaques routes de l'application.
 
-|Route|Temps d'execution|Memoire utilisée _(MB)_|
+|Route|Temps d'éxécution|Memoire utilisée _(MB)_|
 |---|---|---|
 |__Home__|
 |Page d'accueil|86.8 _ms_|13.5 _MB_|
@@ -105,7 +105,7 @@ Parmis les données récoltés voici un récap du temps d'éxécution _(en milli
 |__Login__|
 |Login _( formulaire )_|66.2 _ms_|11.2 _MB_|
 |Login _( process )_|66.2 _ms_|13.3 _MB_|
-|Déconexion|79.2 _ms_|13.3 _MB_|
+|Déconnexion|79.2 _ms_|13.3 _MB_|
 ||
 |__Users__|
 |Création d'un utilisateur _( formulaire )_|95 _ms_|14.1 _MB_|
@@ -113,17 +113,15 @@ Parmis les données récoltés voici un récap du temps d'éxécution _(en milli
 |Edition d'un utilisateur _( formulaire )_|118 _ms_|17 _MB_|
 |Edition d'un utilisateur _( process )_|448 _ms_|16.9 _MB_|
 ||
-|__Users__|
-|Liste des tâches _(toutes)_|86.1 _ms_|13.6 _MB_|
-|Liste des tâches _(a faire)_|87.3 _ms_|13.6 _MB_|
-|Liste des tâches _(terminées)_|86.1 _ms_|13.6 _MB_|
-||
 |__Tasks__|
+|Liste des tâches _(toutes)_|86.1 _ms_|13.6 _MB_|
+|Liste des tâches _(à faire)_|87.3 _ms_|13.6 _MB_|
+|Liste des tâches _(terminées)_|86.1 _ms_|13.6 _MB_|
 |Création d'une tâche _( formulaire )_|107 _ms_|16.4 _MB_|
 |Création d'une tâche _( process )_|112 _ms_|16.3 _MB_|
 |Edition d'une tâche _( formulaire )_|109 _ms_|16.5 _MB_|
 |Edition d'une tâche _( process )_|120 _ms_|16.3 _MB_|
-|Changement de status d'une tâche _( toggle )_|90.9 _ms_|13.8 _MB_|
+|Changement de statut d'une tâche _( toggle )_|90.9 _ms_|13.8 _MB_|
 |Suppression d'une tâche|87.7 _ms_|13.8 _MB_|
 
 <div style="page-break-after: always;"></div>
@@ -131,14 +129,13 @@ Parmis les données récoltés voici un récap du temps d'éxécution _(en milli
 # Améliorations
 ---
 ## __Dockerization__
-L'intégration de Docker permet de facilement et rapidement configurer un environement complet qui pourra être installé sur nimporte quel machine. Celà permet entre autres, de fournir à tous les développeurs travaillant sur le même projet, un environement identique (version et extensions php, version mysql, services annexes,etc...).
+L'intégration de Docker permet de facilement et rapidement configurer un environement complet qui pourra être installé sur n'importe quelle machine. Cela permet entre autres, de fournir à tous les développeurs travaillant sur le même projet, un environement identique (version et extensions php, version mysql, services annexes,etc...).
 
 [Lien vers la pull request : Dockerize](https://github.com/LFZDavid/Todolist/pull/2/files)
-modules php (xdebug, opcache)
 
 ---
 ## __Implémentation de tests automatisés__
-Les tests unitaires et fonctionnels permettent de s'assurer du fonctionnement des différents éléments de l'application. Les tests pouvant être lancés à tout moments ils permettent par exemple, pendant la phase de développement d'une nouvelle fonctionnalitée, de s'assurer que l'implémentation ne provoque pas d'effets de bords sur le reste de l'application.
+Les tests unitaires et fonctionnels permettent de s'assurer du fonctionnement des différents éléments de l'application. Les tests pouvant être lancés à tout moments ils permettent par exemple, pendant la phase de développement d'une nouvelle fonctionnalité, de s'assurer que l'implémentation ne provoque pas d'effets de bords sur le reste de l'application.
 
 [Lien vers la pull request : Test Legacy](https://github.com/LFZDavid/Todolist/pull/4/files)
 
@@ -150,10 +147,10 @@ La création de fixtures _( ou jeu de données )_ offre la possibilité de simul
 
 ---
 ## __Ajout agent test coverage__
-L'analyse de la couverture de tests permet de s'assurer du taux de couverture des tests automatisés. Une bonne couverture garantie la détection des éventuels disfonctionnement de l'application. 
+L'analyse de la couverture de tests permet de s'assurer du taux de couverture des tests automatisés. Une bonne couverture garantie la détection des éventuels dysfonctionnements de l'application. 
 
 [Lien vers le rapport de test coverage](https://coveralls.io/github/LFZDavid/Todolist)<br>
-_nb_: _certaine partie du code ont été volontairement exclue du coverage._ (ex: route non utilisé _login_check & logout)
+_nb_: _certaines parties du code ont été volontairement exclues du coverage._ (ex: routes non utilisées _login_check & logout)
 
 <div style="page-break-after: always;"></div>
 
@@ -162,18 +159,18 @@ _nb_: _certaine partie du code ont été volontairement exclue du coverage._ (ex
   * fix: des liens défectueux
   * fix: des routes manquantes
 * Ajout de la méthode Task::isDone()
-* Ajout des fichiers manquant :
- * `web/js/jquery.js`
- * `web/css/bootstrap.min.css.map`
+* Ajout des fichiers manquants :
+  * `web/js/jquery.js`
+  * `web/css/bootstrap.min.css.map`
 
 <div style="page-break-after: always;"></div>
 
 ## __Upgrade__
 ### __Symfony__ 
 Migration vers la dernière version LTS de symfony.<br>
-Le passage à une version supérieur du framework serait l'une des principale solution pour améliorer l'application. Néammoins, le choix de la version sur laquelle migrer est primordiale.
+Le passage à une version supérieure du framework serait l'une des principales solutions pour améliorer l'application. Toutefois, le choix de la version sur laquelle migrer est primordiale.
 Le [calendrier de release Symfony](https://symfony.com/releases) indique qu'en moyenne une version LTS _(Long-term support)_ sort tous les 2 ans. 
-Par définition, ces versions sont celle bénéficiant de la période de maintenance la plus longue _(~3ans pour les bugs et ~3,5ans pour la sécurité)_ .
+Par définition, ces versions sont celles bénéficiant de la période de maintenance la plus longue _(~3ans pour les bugs et ~3,5ans pour la sécurité)_ .
 A l'heure ou cet audit est effecuté la version LTS la plus récente est la version `4.4`.  
 
 <img src="img/symfony_releases.png" alt="symfony_releases" height="50%">
@@ -189,7 +186,7 @@ C'est donc cette version qui été utilisé pour le profiling de la branch `deve
 
 ### __Dépendances__
 L'utilisation de la version `4.4` de PHP permet également d'utiliser de nombreux packages via composeur ainsi que des versions supérieurs de la majorités des dépendances.<br>
-Voici une liste non-exaustives des packages concernés : 
+Voici une liste non-éxaustives des packages concernés : 
 >  * sensio/framework-extra-bundle : `3.0` => `5.1`
 >  * phpunit/phpunit : `5.0` => `9.5`
 >  * nelmio/alice : `2.1` => `3.0`
@@ -197,7 +194,7 @@ Voici une liste non-exaustives des packages concernés :
 >  * symfony/security : _composant de sécurité_
 >  * symfony/validator : _validation de création/édition d'entité_
 >  * symfony/dotenv : _gestion de variables d'environement_
->  * symfony/form : _gestion de variables d'environement_
+>  * symfony/form : _formulaires_
 >  * php-coveralls : _rapport de couverture de tests_
 ><br>
 >
@@ -228,29 +225,29 @@ dossier-principale/
 <div style="page-break-after: always;"></div>
 
 ## __Composant de sécurité__
-L'installation du package de sécurité permet une gestion simplifiée des accès au différentes parties de l'application.<br>
-_plus d'information sur le composant de sécurité_ _[ici](../AUTHENTICATION.md)_
+L'installation du package de sécurité permet une gestion simplifiée des accès aux différentes parties de l'application.<br>
+_plus d'informations sur le composant de sécurité_ _[ici](../AUTHENTICATION.md)_
 
 ## __Bonnes pratiques__
 * Création de class __Repositories__ récupéré par injections de dépendances.
 * Utiliser la classe __EntityManager__ au lieu de ObjectManager.
 * Utilisation de __Listener__ pour l'encodage du mot de passe utilisateur.
 * Suppression du suffix "_Action_" dans les noms de methods des controller.
-* Utilisation de __Voter__ pour la gestion des accès au différentes action.effectuable sur les entités.
+* Utilisation de __Voter__ pour la gestion des accès aux différentes actions effectuables sur les entités.
 * Utilisation des déclarations de type (type-hint). 
 
 <div style="page-break-after: always;"></div>
 
 # Gains de performances
 ---
-En comparant les performance de la branche principale avec la branche `develop` qui contient toutes les améliorations présentées ci-dessus, on constate une nette amélioration des performances. 
+En comparant les performances de la branche principale avec la branche `develop` qui contient toutes les améliorations présentées ci-dessus, on constate une nette amélioration des performances. 
 
 |Gain moyen|%|
 |---|---|
-|Temps d'execution | 65,6%|
+|Temps d'éxecution | 65,6%|
 |Utilisation mémoire | 75,5%|
 
-|Route|Temps d'execution|Memoire utilisée _(MB)_|
+|Route|Temps d'éxecution|Mémoire utilisée _(MB)_|
 |---|---|---|
 |__Home__|
 |Page d'accueil|28 _ms_ __(-68%)__|2.99 _MB_ __(-78%)__|
@@ -258,7 +255,7 @@ En comparant les performance de la branche principale avec la branche `develop` 
 |__Login__|
 |Login _( formulaire )_|18 _ms_ __(-76%)__|2.64 _MB_ __(-73%)__|
 |Login _( process )_|125 _ms_ __(-78%)__|2.99 _MB_ __(-70%)__|
-|Déconexion|26.5 _ms_ __(-78%)__|2.88 _MB_ __(-66%)__|
+|Déconnexion|26.5 _ms_ __(-78%)__|2.88 _MB_ __(-66%)__|
 ||
 |__Users__|
 |Création d'un utilisateur _( formulaire )_|43.3 _ms_ __(-70%)__|4.27 _MB_ __(-54%)__|
@@ -268,25 +265,25 @@ En comparant les performance de la branche principale avec la branche `develop` 
 ||
 |__Tasks__|
 |Liste des tâches _(toutes)_|30.7 _ms_ __(-77%)__|3.11 _MB_ __(-67%)__|
-|Liste des tâches _(a faire)_|30.6 _ms_ __(-77%)__|3.13 _MB_ __(-65%)__|
+|Liste des tâches _(à faire)_|30.6 _ms_ __(-77%)__|3.13 _MB_ __(-65%)__|
 |Liste des tâches _(terminées)_|31.3 _ms_ __(-77%)__|3.13 _MB_ __(-64%)__|
 |Création d'une tâche _( formulaire )_|38.6 _ms_ __(-75%)__|4.03 _MB_ __(-64%)__|
 |Création d'une tâche _( process )_|44 _ms_ __(-75%)__|4.14 _MB_ __(-61%)__|
 |Edition d'une tâche _( formulaire )_|40 _ms_ __(-75%)__|4.04 _MB_ __(-63%)__|
 |Edition d'une tâche _( process )_|43.5 _ms_ __(-75%)__|4.13 _MB_ __(-64%)__|
-|Changement de status d'une tâche _( toggle )_|35.6 _ms_ __(-76%)__ |3.29 _MB_ __(-61%)__|
+|Changement de statut d'une tâche _( toggle )_|35.6 _ms_ __(-76%)__ |3.29 _MB_ __(-61%)__|
 |Suppression d'une tâche|35.3 _ms_ __(-76%)__|3.38 _MB_ __(-60%)__|
 
 <div style="page-break-after: always;"></div>
 
-# __Suggestion d'améliorations__
+# __Suggestions d'améliorations__
 ---
 ### Cache
   La mise en place de mise en cache sur certaines pages permettrait de réduire d'avantage le chargement.
 ### Pagination
-  Dans l'hypothèse ou le nombre de taches et d'utilisateurs atteindrait un nombre important un syteme de pagination permettrait d'améliorer le confort de navigation et également de limiter le chargement d'éléments sur les pages destinées à afficher une liste de ces entités.
+  Dans l'hypothèse où le nombre de tâches et d'utilisateurs atteindraient un nombre important, un systeme de pagination permettrait d'améliorer le confort de navigation et également de limiter le nombre d'éléments chargés sur certaines pages.
 ### Navigation a facettes
-  La navigation a facettes permettrait de filter l'affichage des taches de manière intuitive (ex: période de création, autheur, etc...).
+  La navigation à facettes permettrait de filtrer les tâches affichées, de manière intuitive (ex: période de création, auteur, etc...).
 
 ### Migration version php 8
-  La version 8 de PHP est relativement récente à l'heure actuelle mais il serait très probablement bénéfique, à terme, de migrer vers cette version afin de bénéficier de nouvelles fonctionnalitées et évolutions liées au languages (ex : Attributs, Types d'union, etc... ).
+  La version 8 de PHP est relativement récente à l'heure actuelle mais il serait très probablement bénéfique, à terme, de migrer vers cette version afin de bénéficier de nouvelles fonctionnalitées et évolutions liées au language (ex : Attributs, Types d'union, etc... ).
