@@ -172,7 +172,7 @@ class TaskControllerTest extends DefaultControllerTest
         /** Check task infos */
         $this->assertContains(
             $task->getTitle(), 
-            $crawler->filter("#task_title")->first()->extract('value'));
+            $crawler->filter("#task_title")->first()->extract(['value']));
         $this->assertSelectorTextContains('#task_content', $task->getContent());
         
         /** Select form */
@@ -251,7 +251,7 @@ class TaskControllerTest extends DefaultControllerTest
         /** Check task infos */
         $this->assertContains(
             $task->getTitle(), 
-            $crawler->filter("#task_title")->first()->extract('value'));
+            $crawler->filter("#task_title")->first()->extract(['value']));
         $this->assertSelectorTextContains('#task_content', $task->getContent());
     }
 

@@ -10,9 +10,67 @@ Base du projet #8 : Améliorez un projet existant
 
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 
-## Technical Requirements
 ---
-* PHP ( version >= 7.1.3 )
+
+## Installation with Docker __(recommended)__
+### Get files
+>```
+>git clone https://github.com/LFZDavid/Todolist.git
+>```
+
+>### .env file
+>```
+>cd Todolist
+>```
+>```
+>cp sample.env .env
+>```
+
+>### Run Containers
+>```
+>docker-compose up -d
+>```
+
+>### Install dependencies : 
+>```
+>docker exec -i todolist_web composer install
+>```
+
+>### Install database on environments:
+>
+>_`dev/prod :`_
+>```
+>docker exec -i todolist_web bin/console doctrine:database:drop --if-exists --force
+>```
+>```
+>docker exec -i todolist_web bin/console doctrine:database:create
+>```
+>```
+>docker exec -i todolist_web bin/console doctrine:schema:update --force
+>```
+
+>_`test :`_
+>```
+>docker exec -i todolist_web bin/console doctrine:database:drop --if-exists --force --env=test
+>```
+>```
+>docker exec -i todolist_web bin/console doctrine:database:create --env=test
+>```
+>```
+>docker exec -i todolist_web bin/console doctrine:schema:update --force --env=test
+>```
+
+>### Load fixtures: _( `optional` )_
+>    ```
+>    docker exec -i todolist_web bin/console doctrine:fixtures:load
+>    ```
+><br>
+
+---
+## Without Docker...
+
+## Technical Requirements
+* PHP ( version >= 7.1.3 ) `7.4 recommanded`
 * Database : 
     * mariadb ( version >= 10.2 )
     <br>or 
@@ -21,7 +79,6 @@ https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 
 more infos : _[symfony documentation](https://symfony.com/doc/current/setup.html#technical-requirements)_
 
----
 
 ## Installation
 >1. ### Get files : 
@@ -37,6 +94,7 @@ more infos : _[symfony documentation](https://symfony.com/doc/current/setup.html
 
 >3. ### Database :
 >* set database connection in `.env` file
+>* create a copy of `sample.env` and rename it `.env`
 >```
 >DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7"
 >```
